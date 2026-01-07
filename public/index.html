@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>rafaInvest - Dashboard Educacional de Investimentos</title>
+    <meta name="description" content="Plataforma educacional para aprender sobre investimentos: CDB, FIIs, Tesouro Direto, Criptomoedas e mais.">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+</head>
+<body>
+    
+    <!-- Ícones SVG -->
+    <div style="display: none;">
+        <div id="svg-icons"></div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <p>Carregando dados...</p>
+        </div>
+    </div>
+
+    <!-- Container Principal -->
+    <div class="app-container">
+        
+        <!-- Menu Mobile Toggle -->
+        <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Menu">
+            <svg class="icon">
+                <use href="svgs/icons.svg#icon-menu"></use>
+            </svg>
+        </button>
+
+        <!-- Overlay Mobile -->
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-logo">
+                <h1>
+                    <svg class="logo-icon">
+                        <use href="svgs/icons.svg#icon-chart"></use>
+                    </svg>
+                    rafaInvest
+                </h1>
+            </div>
+
+            <nav>
+                <ul class="sidebar-nav">
+                    <li class="sidebar-nav-item">
+                        <a href="#" class="sidebar-nav-link active" data-page="home">
+                            <svg class="icon">
+                                <use href="svgs/icons.svg#icon-home"></use>
+                            </svg>
+                            <span>Educação</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-nav-item">
+                        <a href="#" class="sidebar-nav-link" data-page="dashboard">
+                            <svg class="icon">
+                                <use href="svgs/icons.svg#icon-dashboard"></use>
+                            </svg>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-nav-item">
+                        <a href="#" class="sidebar-nav-link" data-page="news">
+                            <svg class="icon">
+                                <use href="svgs/icons.svg#icon-news"></use>
+                            </svg>
+                            <span>Notícias</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-nav-item">
+                        <a href="#" class="sidebar-nav-link" data-page="calculators">
+                            <svg class="icon">
+                                <use href="svgs/icons.svg#icon-calculator"></use>
+                            </svg>
+                            <span>Calculadoras</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-nav-item">
+                        <a href="#" class="sidebar-nav-link" data-page="profile">
+                            <svg class="icon">
+                                <use href="svgs/icons.svg#icon-user"></use>
+                            </svg>
+                            <span>Projeções & Perfil</span>
+                        </a>
+                    </li>
+                    
+                    <!-- Separador -->
+                    <li style="margin: 1.5rem 0; border-top: 1px solid rgba(255, 255, 255, 0.1);"></li>
+                    
+                    <!-- Recomendações (destacado) -->
+                    <li class="sidebar-nav-item">
+                        <a href="#" class="sidebar-nav-link recommendations-link" onclick="openRecommendationsModal(event)">
+                            <svg class="icon">
+                                <use href="svgs/icons.svg#icon-trending-up"></use>
+                            </svg>
+                            <span>Recomendações de Hoje</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Conteúdo Principal -->
+        <main class="main-content">
+            
+            <!-- Header Dinâmico -->
+            <div class="content-header" id="contentHeader">
+                <h2 id="pageTitle">Educação Financeira</h2>
+                <p id="pageSubtitle">Aprenda sobre investimentos de forma simples e clara</p>
+            </div>
+
+            <!-- Body do Conteúdo -->
+            <div class="content-body" id="contentBody">
+                
+                <!-- ========================================
+                     PÁGINA: HOME / EDUCAÇÃO
+                     ======================================== -->
+                <section class="page-section active" id="page-home">
+                    
+                    <!-- Boas-vindas -->
+                    <div class="card welcome-card mb-4" style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%); border: 1px solid rgba(99, 102, 241, 0.2); padding: 2.5rem; position: relative; overflow: hidden;">
+                        <!-- Decoração de fundo -->
+                        <div style="position: absolute; top: -50px; right: -50px; width: 200px; height: 200px; background: radial-gradient(circle, rgba(99, 102, 241, 0.1) 0%, transparent 70%); pointer-events: none;"></div>
+                        
+                        <div style="display: flex; align-items: center; gap: 1.5rem; position: relative; z-index: 1;">
+                            <!-- Ícone grande -->
+                            <div style="flex-shrink: 0; width: 72px; height: 72px; background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(139, 92, 246, 0.15) 100%); border-radius: 18px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);">
+                                <svg class="icon" style="width: 38px; height: 38px; color: var(--accent-primary);">
+                                    <use href="svgs/icons.svg#icon-book"></use>
+                                </svg>
+                            </div>
+                            
+                            <!-- Conteúdo -->
+                            <div style="flex: 1;">
+                                <h2 style="font-family: 'Poppins', sans-serif; font-size: 1.75rem; font-weight: 700; color: var(--text-dark); margin-bottom: 0.75rem; letter-spacing: -0.02em;">
+                                    Bem-vindo ao rafaInvest
+                                </h2>
+                                <p style="font-size: 1rem; color: var(--text-light); line-height: 1.7; margin: 0;">
+                                    Um painel educacional para te ajudar a entender o básico de investimentos e entrar nesse mundo com confiança. Aqui você vai aprender sobre as principais opções do mercado, descobrir seu perfil de investidor e fazer simulações práticas.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- O que são essas siglas? -->
+                    <div class="mb-4">
+                        <h3 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--text-dark);">
+                            O que são essas siglas?
+                        </h3>
+                        
+                        <div class="cards-grid" id="siglasGrid">
+                            <!-- Cards serão injetados via JS -->
+                        </div>
+                    </div>
+
+                    <!-- Perfis de Investidor -->
+                    <div class="mb-4">
+                        <h3 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--text-dark);">
+                            Perfis de Investidor
+                        </h3>
+                        
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;" id="perfisGrid">
+                            <!-- Cards serão injetados via JS -->
+                        </div>
+                    </div>
+
+                    <!-- Como começar -->
+                    <div class="card">
+                        <h3 class="card-title" style="font-size: 1.5rem; margin-bottom: 1.5rem;">
+                            <svg class="icon" style="width: 24px; height: 24px;">
+                                <use href="svgs/icons.svg#icon-arrow-right"></use>
+                            </svg>
+                            Como começar a investir
+                        </h3>
+                        
+                        <ol style="list-style: none; counter-reset: step-counter; padding: 0;">
+                            <li style="counter-increment: step-counter; margin-bottom: 1.5rem; display: flex; gap: 1rem;">
+                                <span style="flex-shrink: 0; width: 32px; height: 32px; background: var(--info); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700;">1</span>
+                                <div>
+                                    <strong style="display: block; margin-bottom: 0.25rem;">Organize suas finanças</strong>
+                                    <span style="color: var(--text-light);">Entenda seus gastos, elimine dívidas caras e crie um orçamento mensal.</span>
+                                </div>
+                            </li>
+                            <li style="counter-increment: step-counter; margin-bottom: 1.5rem; display: flex; gap: 1rem;">
+                                <span style="flex-shrink: 0; width: 32px; height: 32px; background: var(--info); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700;">2</span>
+                                <div>
+                                    <strong style="display: block; margin-bottom: 0.25rem;">Monte sua reserva de emergência</strong>
+                                    <span style="color: var(--text-light);">Guarde de 3 a 6 meses de despesas em investimentos de liquidez diária (Tesouro Selic, CDB).</span>
+                                </div>
+                            </li>
+                            <li style="counter-increment: step-counter; margin-bottom: 1.5rem; display: flex; gap: 1rem;">
+                                <span style="flex-shrink: 0; width: 32px; height: 32px; background: var(--info); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700;">3</span>
+                                <div>
+                                    <strong style="display: block; margin-bottom: 0.25rem;">Comece pela renda fixa</strong>
+                                    <span style="color: var(--text-light);">CDBs, Tesouro Direto e LCIs são ótimas opções para iniciantes: baixo risco e rentabilidade previsível.</span>
+                                </div>
+                            </li>
+                            <li style="counter-increment: step-counter; margin-bottom: 1.5rem; display: flex; gap: 1rem;">
+                                <span style="flex-shrink: 0; width: 32px; height: 32px; background: var(--info); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700;">4</span>
+                                <div>
+                                    <strong style="display: block; margin-bottom: 0.25rem;">Diversifique aos poucos</strong>
+                                    <span style="color: var(--text-light);">Com experiência, adicione FIIs, ações e até criptomoedas (pequena parte do portfólio).</span>
+                                </div>
+                            </li>
+                            <li style="counter-increment: step-counter; display: flex; gap: 1rem;">
+                                <span style="flex-shrink: 0; width: 32px; height: 32px; background: var(--info); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700;">5</span>
+                                <div>
+                                    <strong style="display: block; margin-bottom: 0.25rem;">Estude sempre</strong>
+                                    <span style="color: var(--text-light);">Acompanhe notícias, leia sobre economia e use ferramentas como este dashboard para monitorar seus investimentos.</span>
+                                </div>
+                            </li>
+                        </ol>
+
+                        <div style="margin-top: 2rem; text-align: center;">
+                            <button class="btn btn-primary" onclick="navigateToPage('dashboard')">
+                                <svg class="icon">
+                                    <use href="svgs/icons.svg#icon-dashboard"></use>
+                                </svg>
+                                Ir para Dashboard
+                            </button>
+                        </div>
+                    </div>
+
+                </section>
+
+                <!-- ========================================
+                     PÁGINA: DASHBOARD
+                     ======================================== -->
+                <section class="page-section" id="page-dashboard">
+                    
+                    <!-- Filtros -->
+                    <div class="card mb-3" style="padding: 1rem 1.5rem;">
+                        <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
+                            <div>
+                                <input type="text" class="form-input" id="searchAssets" placeholder="Buscar ativo..." style="width: 250px; padding: 0.5rem 1rem;">
+                            </div>
+                            <div style="display: flex; gap: 0.5rem;">
+                                <button class="btn btn-outline" data-filter="all">Todos</button>
+                                <button class="btn btn-outline" data-filter="crypto">Criptos</button>
+                                <button class="btn btn-outline" data-filter="fiis">FIIs</button>
+                                <button class="btn btn-outline" data-filter="cdb">Renda Fixa</button>
+                            </div>
+                            <div style="margin-left: auto;">
+                                <span style="color: var(--text-light); font-size: 0.875rem;">Última atualização: <strong id="lastUpdate">--</strong></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Cards de Ativos -->
+                    <div class="cards-grid" id="assetsGrid">
+                        <!-- Injetado via JS -->
+                    </div>
+
+                    <!-- Gráficos -->
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 1.5rem; margin-top: 2rem;">
+                        <div class="card">
+                            <h3 class="card-title">
+                                <svg class="icon">
+                                    <use href="svgs/icons.svg#icon-crypto"></use>
+                                </svg>
+                                Top Criptomoedas
+                            </h3>
+                            <canvas id="cryptoChart" style="margin-top: 1rem;"></canvas>
+                        </div>
+                        <div class="card">
+                            <h3 class="card-title">
+                                <svg class="icon">
+                                    <use href="svgs/icons.svg#icon-building"></use>
+                                </svg>
+                                FIIs por Dividend Yield
+                            </h3>
+                            <canvas id="fiisChart" style="margin-top: 1rem;"></canvas>
+                        </div>
+                    </div>
+
+                </section>
+
+                <!-- ========================================
+                     PÁGINA: NOTÍCIAS
+                     ======================================== -->
+                <section class="page-section" id="page-news">
+                    
+                    <!-- Filtros de Fonte -->
+                    <div class="card mb-3" style="padding: 1rem 1.5rem;">
+                        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                            <button class="btn btn-primary" data-source="all">Todas as Fontes</button>
+                            <button class="btn btn-outline" data-source="InfoMoney">InfoMoney</button>
+                            <button class="btn btn-outline" data-source="Mercado">Mercado</button>
+                            <button class="btn btn-outline" data-source="Bloomberg">Bloomberg</button>
+                            <button class="btn btn-outline" data-source="Reuters">Reuters</button>
+                        </div>
+                    </div>
+
+                    <!-- Grid de Notícias -->
+                    <div class="cards-grid" id="newsGrid">
+                        <!-- Injetado via JS -->
+                    </div>
+
+                </section>
+
+                <!-- ========================================
+                     PÁGINA: CALCULADORAS
+                     ======================================== -->
+                <section class="page-section" id="page-calculators">
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 2rem;">
+                        
+                        <!-- Calculadora de Financiamento -->
+                        <div class="card">
+                            <h3 class="card-title" style="font-size: 1.25rem; margin-bottom: 1.5rem;">
+                                <svg class="icon">
+                                    <use href="svgs/icons.svg#icon-calculator"></use>
+                                </svg>
+                                Financiamento
+                            </h3>
+                            
+                            <form id="financingForm">
+                                <div class="form-group">
+                                    <label class="form-label">Valor do bem (R$)</label>
+                                    <input type="number" class="form-input" id="finValue" placeholder="200000" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Taxa de juros (% ao ano)</label>
+                                    <input type="number" class="form-input" id="finRate" placeholder="10" step="0.1" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Prazo (meses)</label>
+                                    <input type="number" class="form-input" id="finMonths" placeholder="360" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary" style="width: 100%;">Calcular</button>
+                            </form>
+
+                            <div id="finResult" style="display: none; margin-top: 1.5rem; padding: 1rem; background: var(--bg-surface); border-radius: 0.5rem; border: 1px solid var(--border-color);">
+                                <div style="margin-bottom: 0.75rem;">
+                                    <span style="color: var(--text-light); font-size: 0.875rem;">Prestação mensal</span>
+                                    <div style="font-size: 1.5rem; font-weight: 700; color: var(--text-dark);" id="finInstallment">--</div>
+                                </div>
+                                <div>
+                                    <span style="color: var(--text-light); font-size: 0.875rem;">Total pago</span>
+                                    <div style="font-size: 1.25rem; font-weight: 600; color: var(--text-dark);" id="finTotal">--</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Simulador de Investimento -->
+                        <div class="card">
+                            <h3 class="card-title" style="font-size: 1.25rem; margin-bottom: 1.5rem;">
+                                <svg class="icon">
+                                    <use href="svgs/icons.svg#icon-money"></use>
+                                </svg>
+                                Simulador de Investimento
+                            </h3>
+                            
+                            <form id="investmentForm">
+                                <div class="form-group">
+                                    <label class="form-label">Valor inicial (R$)</label>
+                                    <input type="number" class="form-input" id="invInitial" placeholder="10000" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Aporte mensal (R$)</label>
+                                    <input type="number" class="form-input" id="invMonthly" placeholder="500" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Tipo de investimento</label>
+                                    <select class="form-select" id="invType" required>
+                                        <option value="10">Renda Fixa (≈10% a.a.)</option>
+                                        <option value="12">Tesouro IPCA+ (≈12% a.a.)</option>
+                                        <option value="15">FIIs (≈15% a.a.)</option>
+                                        <option value="20">Ações (≈20% a.a.)</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Prazo (anos)</label>
+                                    <input type="number" class="form-input" id="invYears" placeholder="10" required>
+                                </div>
+                                <button type="submit" class="btn btn-success" style="width: 100%;">Simular</button>
+                            </form>
+
+                            <div id="invResult" style="display: none; margin-top: 1.5rem; padding: 1rem; background: rgba(16, 185, 129, 0.1); border-radius: 0.5rem; border: 1px solid var(--success);">
+                                <div style="margin-bottom: 0.75rem;">
+                                    <span style="color: var(--success); font-size: 0.875rem; font-weight: 600;">Valor final estimado</span>
+                                    <div style="font-size: 1.75rem; font-weight: 700; color: var(--success);" id="invFinal">--</div>
+                                </div>
+                                <div style="font-size: 0.875rem; color: var(--text-light);">
+                                    Total investido: <strong id="invInvested">--</strong> | Rendimento: <strong id="invProfit">--</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="alert alert-info mt-4">
+                        <svg class="icon">
+                            <use href="svgs/icons.svg#icon-info"></use>
+                        </svg>
+                        <div>
+                            <strong>Importante:</strong> Estas são simulações ilustrativas baseadas em rentabilidades médias históricas. Rentabilidade passada não é garantia de rentabilidade futura. Consulte um assessor financeiro para decisões reais.
+                        </div>
+                    </div>
+
+                </section>
+
+                <!-- ========================================
+                     PÁGINA: PROJEÇÕES & PERFIL
+                     ======================================== -->
+                <section class="page-section" id="page-profile">
+                    
+                    <div style="max-width: 900px; margin: 0 auto;">
+                        
+                        <!-- Questionário -->
+                        <div class="card mb-4" id="profileQuiz">
+                            <h3 class="card-title" style="font-size: 1.5rem; margin-bottom: 1rem;">
+                                <svg class="icon" style="width: 24px; height: 24px;">
+                                    <use href="svgs/icons.svg#icon-user"></use>
+                                </svg>
+                                Descubra seu Perfil de Investidor
+                            </h3>
+                            <p style="color: var(--text-light); margin-bottom: 2rem;">
+                                Responda as perguntas abaixo para identificar seu perfil e receber sugestões personalizadas de investimentos.
+                            </p>
+
+                            <form id="quizForm">
+                                <!-- Perguntas injetadas via JS -->
+                                <div id="quizQuestions"></div>
+                                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1.5rem;">Ver meu perfil</button>
+                            </form>
+                        </div>
+
+                        <!-- Resultado do Perfil -->
+                        <div style="display: none;" id="profileResult">
+                            <div class="card mb-3">
+                                <div style="text-align: center; padding: 1rem 0;">
+                                    <div style="font-size: 1.125rem; color: var(--text-light); margin-bottom: 0.5rem;">Seu perfil é</div>
+                                    <h2 style="font-size: 2.5rem; font-weight: 700; color: var(--info); margin-bottom: 1rem;" id="profileName">--</h2>
+                                    <p style="color: var(--text-light); max-width: 600px; margin: 0 auto;" id="profileDescription">--</p>
+                                </div>
+                            </div>
+
+                            <div class="card mb-3">
+                                <h3 class="card-title" style="margin-bottom: 1.5rem;">
+                                    <svg class="icon">
+                                        <use href="svgs/icons.svg#icon-chart"></use>
+                                    </svg>
+                                    Alocação Sugerida
+                                </h3>
+                                <canvas id="allocationChart" style="max-height: 300px;"></canvas>
+                            </div>
+
+                            <div class="card">
+                                <h3 class="card-title" style="margin-bottom: 1.5rem;">
+                                    <svg class="icon">
+                                        <use href="svgs/icons.svg#icon-money"></use>
+                                    </svg>
+                                    Projeção de Rentabilidade
+                                </h3>
+                                <p style="color: var(--text-light); margin-bottom: 2rem;">
+                                    Se você investisse <strong>R$ 10.000</strong> seguindo a alocação sugerida para seu perfil, em <strong>10 anos</strong> poderia ter aproximadamente:
+                                </p>
+                                <div style="text-align: center; padding: 2rem; background: rgba(59, 130, 246, 0.1); border-radius: 0.75rem; border: 2px solid var(--info);">
+                                    <div style="font-size: 0.875rem; color: var(--info); font-weight: 600; margin-bottom: 0.5rem;">VALOR ESTIMADO</div>
+                                    <div style="font-size: 3rem; font-weight: 700; color: var(--info);" id="projectionValue">--</div>
+                                    <div style="margin-top: 1rem; color: var(--text-light); font-size: 0.875rem;">
+                                        Rentabilidade média anual: <strong id="projectionRate">--</strong>
+                                    </div>
+                                </div>
+
+                                <div class="alert alert-warning mt-3">
+                                    <svg class="icon">
+                                        <use href="svgs/icons.svg#icon-alert"></use>
+                                    </svg>
+                                    <div>
+                                        <strong>Atenção:</strong> Esta é uma simulação educacional baseada em médias históricas. Rentabilidade real pode variar significativamente. Não é recomendação de investimento.
+                                    </div>
+                                </div>
+
+                                <div style="text-align: center; margin-top: 2rem;">
+                                    <button class="btn btn-secondary" onclick="resetProfileQuiz()">Refazer teste</button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </section>
+
+            </div>
+
+        </main>
+
+    </div>
+
+    <!-- Modal Genérico -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Título</h3>
+                <button class="modal-close" onclick="closeModal()">
+                    <svg class="icon">
+                        <use href="svgs/icons.svg#icon-x"></use>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Conteúdo dinâmico -->
+            </div>
+            <div class="modal-footer" id="modalFooter">
+                <button class="btn btn-secondary" onclick="closeModal()">Fechar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Recomendações -->
+    <div class="modal-overlay" id="welcomeModal">
+        <div class="modal" style="max-width: 800px;">
+            <div class="modal-header" style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%); border-bottom: 2px solid rgba(99, 102, 241, 0.2);">
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <div style="width: 48px; height: 48px; background: linear-gradient(135deg, #6366F1, #8B5CF6); border-radius: 12px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);">
+                        <svg class="icon" style="width: 28px; height: 28px; color: white;">
+                            <use href="svgs/icons.svg#icon-trending-up"></use>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="modal-title" style="font-size: 1.5rem; margin-bottom: 0.25rem;">Recomendações de Hoje</h3>
+                        <p style="font-size: 0.875rem; color: var(--text-muted); margin: 0;">Baseadas nas taxas reais do mercado</p>
+                    </div>
+                </div>
+                <button class="modal-close" onclick="closeWelcomeModal()">
+                    <svg class="icon">
+                        <use href="svgs/icons.svg#icon-x"></use>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body" id="recommendationsBody" style="padding: 2rem;">
+                <div style="text-align: center; padding: 2rem;">
+                    <div class="spinner" style="margin: 0 auto 1rem;"></div>
+                    <p style="color: var(--text-muted);">Carregando recomendações...</p>
+                </div>
+            </div>
+            <div class="modal-footer" style="display: flex; justify-content: space-between; align-items: center;">
+                <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                    <input type="checkbox" id="dontShowAgain" style="width: 16px; height: 16px; cursor: pointer;">
+                    <span style="font-size: 0.875rem; color: var(--text-muted);">Não mostrar novamente</span>
+                </label>
+                <button class="btn btn-primary" onclick="closeWelcomeModal()">Começar a Aprender</button>
+            </div>
+        </div>
+    </div>
+                <button class="btn btn-secondary" onclick="closeModal()">Fechar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script src="app.js"></script>
+
+</body>
+</html>
