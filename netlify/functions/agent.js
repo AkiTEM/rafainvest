@@ -33,10 +33,20 @@ exports.handler = async function(event, context) {
             };
         }
 
-        // Chave reconstruída (ofuscada para evitar detecção do GitHub)
-        const key1 = 'pplx-jwOmg2dPUwiNgBEgLRY';
-        const key2 = 'aWzv0dfuaipBqE6a0muAQJ6nmZRip';
-        const PERPLEXITY_API_KEY = key1 + key2;
+        // Chave da API do Netlify Environment Variables
+        // Para desenvolvimento local: adicione no .env.local
+        const PERPLEXITY_API_KEY = process.env.PERPLEXITY_API_KEY;
+
+        if (!PERPLEXITY_API_KEY) {
+            return {
+                statusCode: 500,
+                headers,
+                body: JSON.stringify({ 
+                    error: 'API key not configured',
+                    message: 'Set PERPLEXITY_API_KEY in Netlify environment variables'
+                })
+            };
+        }
 
         const response = await fetch('https://api.perplexity.ai/chat/completions', {
             method: 'POST',
