@@ -1,4 +1,5 @@
-const fetch = require('node-fetch');
+// Netlify Function para consultar Perplexity AI
+// Fetch é nativo no Node.js 18+
 
 exports.handler = async function(event, context) {
     // CORS headers
