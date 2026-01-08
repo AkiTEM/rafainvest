@@ -18,10 +18,7 @@ const state = {
         news: [],
         educacao: null
     },
-    cache: {
-        lastUpdate: null
-    },
-    userProfile: null
+    cache: {}
 };
 
 // ===== INICIALIZAÇÃO =====
@@ -1193,12 +1190,7 @@ async function loadNews() {
     
     try {
         const newsRes = await fetchWithCache(`${API_BASE}/news`, 'news', 1800000); // 30min
-        console.log('Notícias recebidas:', newsRes);
         state.data.news = newsRes?.news || [];
-        console.log('Total de notícias:', state.data.news.length);
-        
-        // Log das fontes disponíveis
-        const sources = [...new Set(state.data.news.map(n => n.source))];
         
         renderNews();
     } catch (error) {
