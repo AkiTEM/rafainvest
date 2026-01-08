@@ -142,4 +142,87 @@
     <polyline points="20 6 9 17 4 12"/>
   </symbol>
 
+  <!-- Target / Objetivo -->
+  <symbol id="icon-target" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <circle cx="12" cy="12" r="10"/>
+    <circle cx="12" cy="12" r="6"/>
+    <circle cx="12" cy="12" r="2"/>
+  </symbol>
+
+  <!-- Lightbulb / Ideia -->
+  <symbol id="icon-lightbulb" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <path d="M9 18h6"/>
+    <path d="M10 22h4"/>
+    <path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0018 8a6 6 0 10-12 0c0 1.36.52 2.5 1.5 3.5.76.76 1.23 1.52 1.41 2.5"/>
+  </symbol>
+
+  <!-- Bank / Banco -->
+  <symbol id="icon-bank" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <path d="M3 21h18"/>
+    <path d="M5 21V7l7-4 7 4v14"/>
+    <path d="M9 9v12"/>
+    <path d="M15 9v12"/>
+  </symbol>
+
+  <!-- Credit Card -->
+  <symbol id="icon-credit-card" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+    <line x1="1" y1="10" x2="23" y2="10"/>
+  </symbol>
+
+  <!-- Shield / Segurança -->
+  <symbol id="icon-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+  </symbol>
+
+  <!-- Rocket / Lançamento -->
+  <symbol id="icon-rocket" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 00-2.91-.09z"/>
+    <path d="M12 15l-3-3a22 22 0 012-3.95A12.88 12.88 0 0122 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 01-4 2z"/>
+    <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/>
+    <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/>
+  </symbol>
+
+  <!-- Heart / Recomendação -->
+  <symbol id="icon-heart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+  </symbol>
+
+  <!-- Award / Certificado -->
+  <symbol id="icon-award" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <circle cx="12" cy="8" r="7"/>
+    <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/>
+  </symbol>
+
+  <!-- Logo rafaInvest -->
+  <symbol id="logo-rafa" viewBox="0 0 200 60" fill="none">
+    <!-- Gráfico de linha estilizado -->
+    <g stroke="url(#gradient-logo)" stroke-width="3" fill="none">
+      <path d="M5 45 L15 40 L25 35 L35 25 L45 30 L55 15" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="15" cy="40" r="2.5" fill="url(#gradient-logo)"/>
+      <circle cx="25" cy="35" r="2.5" fill="url(#gradient-logo)"/>
+      <circle cx="35" cy="25" r="3" fill="url(#gradient-logo)"/>
+      <circle cx="45" cy="30" r="2.5" fill="url(#gradient-logo)"/>
+      <circle cx="55" cy="15" r="3.5" fill="url(#gradient-logo)"/>
+    </g>
+    
+    <!-- Texto rafaInvest -->
+    <text x="65" y="35" font-family="Poppins, sans-serif" font-size="24" font-weight="700" fill="currentColor">
+      rafa<tspan fill="url(#gradient-logo)">Invest</tspan>
+    </text>
+    
+    <!-- Badge "Beta" ou detalhe -->
+    <rect x="175" y="12" width="20" height="12" rx="6" fill="url(#gradient-logo)" opacity="0.2"/>
+    <text x="185" y="20" font-family="Inter, sans-serif" font-size="8" font-weight="600" fill="url(#gradient-logo)" text-anchor="middle">β</text>
+    
+    <!-- Gradiente -->
+    <defs>
+      <linearGradient id="gradient-logo" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" style="stop-color:#6366F1;stop-opacity:1" />
+        <stop offset="50%" style="stop-color:#8B5CF6;stop-opacity:1" />
+        <stop offset="100%" style="stop-color:#A855F7;stop-opacity:1" />
+      </linearGradient>
+    </defs>
+  </symbol>
+
 </svg>

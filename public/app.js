@@ -98,6 +98,10 @@ function updatePageHeader(page) {
             title: 'Educação Financeira',
             subtitle: 'Aprenda sobre investimentos de forma simples e clara'
         },
+        'getting-started': {
+            title: 'Como Começar a Investir',
+            subtitle: 'Seu guia completo para dar os primeiros passos no mundo dos investimentos'
+        },
         dashboard: {
             title: 'Dashboard de Investimentos',
             subtitle: 'Acompanhe cotações e dados em tempo real'
@@ -117,8 +121,13 @@ function updatePageHeader(page) {
     };
     
     const header = headers[page] || headers.home;
-    document.getElementById('pageTitle').textContent = header.title;
-    document.getElementById('pageSubtitle').textContent = header.subtitle;
+    
+    // Atualizar hero ao invés do header antigo
+    const heroTitle = document.getElementById('heroTitle');
+    const heroSubtitle = document.getElementById('heroSubtitle');
+    
+    if (heroTitle) heroTitle.textContent = header.title;
+    if (heroSubtitle) heroSubtitle.textContent = header.subtitle;
 }
 
 async function loadPageData(page) {
@@ -130,6 +139,9 @@ async function loadPageData(page) {
             }
             renderSiglasCards();
             renderPerfisCards();
+            break;
+        case 'getting-started':
+            renderGettingStartedPage();
             break;
         case 'dashboard':
             await loadDashboardData();
@@ -206,6 +218,30 @@ function applyAssetFilter(filter) {
             card.style.display = 'none';
         }
     });
+    
+    // Controlar visibilidade dos gráficos
+    const cryptoChartCard = document.querySelector('#cryptoChart')?.closest('.card');
+    const fiisTableCard = document.querySelector('#fiisTable')?.closest('.card');
+    
+    if (cryptoChartCard && fiisTableCard) {
+        if (filter === 'all') {
+            // Mostrar ambos
+            cryptoChartCard.style.display = 'block';
+            fiisTableCard.style.display = 'block';
+        } else if (filter === 'crypto') {
+            // Mostrar só crypto
+            cryptoChartCard.style.display = 'block';
+            fiisTableCard.style.display = 'none';
+        } else if (filter === 'fiis') {
+            // Mostrar só FIIs
+            cryptoChartCard.style.display = 'none';
+            fiisTableCard.style.display = 'block';
+        } else {
+            // Outros filtros (cdb/renda fixa) - esconder gráficos
+            cryptoChartCard.style.display = 'none';
+            fiisTableCard.style.display = 'none';
+        }
+    }
 }
 
 function searchAssets(query) {
@@ -230,8 +266,9 @@ function setupMobileMenu() {
     
     if (toggleBtn) {
         toggleBtn.addEventListener('click', () => {
-            sidebar.classList.toggle('active');
-            overlay.classList.toggle('active');
+            const isActive = sidebar.classList.toggle('active');
+            overlay.classList.toggle('active', isActive);
+            document.body.classList.toggle('menu-open', isActive);
         });
     }
     
@@ -243,6 +280,7 @@ function setupMobileMenu() {
 function closeMobileSidebar() {
     document.getElementById('sidebar').classList.remove('active');
     document.getElementById('sidebarOverlay').classList.remove('active');
+    document.body.classList.remove('menu-open');
 }
 
 // ===== LOADING =====
@@ -833,7 +871,7 @@ function openSiglaModal(siglaId) {
                     <use href="svgs/icons.svg#${sigla.icon}"></use>
                 </svg>
                 <div>
-                    <h4 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 0.25rem;">${sigla.title}</h4>
+                    <h4 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.25rem;">${sigla.title}</h4>
                     <p style="color: var(--text-light); margin: 0;">${sigla.subtitle}</p>
                 </div>
             </div>
@@ -873,7 +911,7 @@ function renderPerfisCards() {
                 <svg class="icon" style="width: 48px; height: 48px; color: ${perfil.color}; margin-bottom: 0.75rem;">
                     <use href="svgs/icons.svg#${perfil.icon}"></use>
                 </svg>
-                <h4 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem;">${perfil.name}</h4>
+                <h4 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem;">${perfil.name}</h4>
                 <p style="color: var(--text-light);">${perfil.description}</p>
             </div>
             
@@ -1033,6 +1071,11 @@ function renderAssetsCards() {
     }).join('');
 }
 
+// Armazenar instâncias dos gráficos
+const chartInstances = {
+    crypto: null
+};
+
 function openAssetModal(type, id) {
     // Implementar modal com detalhes do ativo + mini gráfico
     openModal('Detalhes do Ativo', '<p>Em desenvolvimento...</p>');
@@ -1040,15 +1083,21 @@ function openAssetModal(type, id) {
 
 function renderCharts() {
     renderCryptoChart();
-    renderFiisChart();
+    renderFiisTable();
 }
 
 function renderCryptoChart() {
     const canvas = document.getElementById('cryptoChart');
     if (!canvas || state.data.cryptos.length === 0) return;
     
+    // Destruir gráfico existente
+    if (chartInstances.crypto) {
+        chartInstances.crypto.destroy();
+        chartInstances.crypto = null;
+    }
+    
     const ctx = canvas.getContext('2d');
-    new Chart(ctx, {
+    chartInstances.crypto = new Chart(ctx, {
         type: 'bar',
         data: {
             labels: state.data.cryptos.slice(0, 6).map(c => c.symbol),
@@ -1070,67 +1119,64 @@ function renderCryptoChart() {
     });
 }
 
-function renderFiisChart() {
-    const canvas = document.getElementById('fiisChart');
-    if (!canvas || state.data.fiis.length === 0) {
-        console.log('FIIs Chart: canvas ou dados não disponíveis', {
-            canvas: !!canvas,
-            fiisLength: state.data.fiis.length
-        });
+function renderFiisTable() {
+    const container = document.getElementById('fiisTable');
+    if (!container || state.data.fiis.length === 0) {
+        console.log('FIIs Table: container ou dados não disponíveis');
         return;
     }
     
-    const ctx = canvas.getContext('2d');
+    const fiisData = state.data.fiis.slice(0, 10);
     
-    // Preparar dados
-    const fiisData = state.data.fiis.slice(0, 6);
+    const tableHTML = `
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; font-size: 0.875rem;">
+                <thead>
+                    <tr style="border-bottom: 2px solid var(--border-color);">
+                        <th style="padding: 0.75rem; text-align: left; font-weight: 600; color: var(--text-dark);">Ticker</th>
+                        <th style="padding: 0.75rem; text-align: left; font-weight: 600; color: var(--text-dark);">Nome</th>
+                        <th style="padding: 0.75rem; text-align: right; font-weight: 600; color: var(--text-dark);">Dividend Yield</th>
+                        <th style="padding: 0.75rem; text-align: right; font-weight: 600; color: var(--text-dark);">Preço</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${fiisData.map((fii, index) => {
+                        const yield_value = parseFloat(fii.yield || fii.dividendYield || 0);
+                        const price = fii.price || fii.currentPrice || '-';
+                        
+                        return `
+                            <tr style="border-bottom: 1px solid var(--border-light); transition: background-color 0.2s;">
+                                <td style="padding: 0.875rem 0.75rem;">
+                                    <span style="font-weight: 600; color: var(--accent-primary);">${fii.ticker}</span>
+                                </td>
+                                <td style="padding: 0.875rem 0.75rem; color: var(--text-dark);">
+                                    ${fii.name || fii.ticker}
+                                </td>
+                                <td style="padding: 0.875rem 0.75rem; text-align: right;">
+                                    <span style="font-weight: 600; color: var(--success);">${yield_value.toFixed(2)}%</span>
+                                </td>
+                                <td style="padding: 0.875rem 0.75rem; text-align: right; color: var(--text-dark);">
+                                    ${typeof price === 'number' ? `R$ ${price.toFixed(2)}` : price}
+                                </td>
+                            </tr>
+                        `;
+                    }).join('')}
+                </tbody>
+            </table>
+        </div>
+    `;
     
-    new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: fiisData.map(f => f.ticker),
-            datasets: [{
-                label: 'Dividend Yield (%)',
-                data: fiisData.map(f => parseFloat(f.yield || f.dividendYield || 0)),
-                backgroundColor: 'rgba(59, 130, 246, 0.8)',
-                borderColor: 'rgba(59, 130, 246, 1)',
-                borderWidth: 2,
-                borderRadius: 6
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: true,
-            plugins: {
-                legend: { 
-                    display: true,
-                    labels: {
-                        font: {
-                            family: 'Inter',
-                            size: 12,
-                            weight: 600
-                        }
-                    }
-                },
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            return `Dividend Yield: ${context.parsed.y.toFixed(2)}%`;
-                        }
-                    }
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    ticks: {
-                        callback: function(value) {
-                            return value + '%';
-                        }
-                    }
-                }
-            }
-        }
+    container.innerHTML = tableHTML;
+    
+    // Adicionar hover effect
+    const rows = container.querySelectorAll('tbody tr');
+    rows.forEach(row => {
+        row.addEventListener('mouseenter', () => {
+            row.style.backgroundColor = 'var(--bg-surface)';
+        });
+        row.addEventListener('mouseleave', () => {
+            row.style.backgroundColor = 'transparent';
+        });
     });
 }
 
@@ -1365,6 +1411,370 @@ function resetProfileQuiz() {
     document.getElementById('profileResult').style.display = 'none';
     document.getElementById('quizForm').reset();
     state.userProfile = null;
+}
+
+// ===== PÁGINA COMO COMEÇAR =====
+function renderGettingStartedPage() {
+    const container = document.getElementById('gettingStartedContent');
+    if (!container) return;
+    
+    container.innerHTML = `
+        <div style="max-width: 900px; margin: 0 auto;">
+            
+            <div class="card" style="margin-bottom: 2rem; padding: 2rem; background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1)); border-left: 4px solid var(--accent-primary);">
+                <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                    <svg style="width: 32px; height: 32px; color: var(--accent-primary); flex-shrink: 0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <circle cx="12" cy="12" r="6"/>
+                        <circle cx="12" cy="12" r="2"/>
+                    </svg>
+                    <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--text-dark); margin: 0;">
+                        Por onde começar?
+                    </h2>
+                </div>
+                <p style="font-size: 1rem; line-height: 1.7; color: var(--text-light); margin-bottom: 1rem;">
+                    Investir pode parecer complicado no começo, mas com as informações certas e os passos corretos, qualquer pessoa pode começar. 
+                    Este guia vai te mostrar exatamente o que fazer para abrir sua conta e fazer seus primeiros investimentos.
+                </p>
+                <div style="display: flex; gap: 0.75rem; align-items: flex-start;">
+                    <svg style="width: 20px; height: 20px; min-width: 20px; color: var(--accent-primary); flex-shrink: 0; margin-top: 2px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 18h6"/>
+                        <path d="M10 22h4"/>
+                        <path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0018 8a6 6 0 10-12 0c0 1.36.52 2.5 1.5 3.5.76.76 1.23 1.52 1.41 2.5"/>
+                    </svg>
+                    <p style="font-size: 0.9375rem; color: var(--text-muted); font-style: italic; margin: 0;">
+                        <strong>Lembre-se:</strong> investir é uma jornada de aprendizado contínuo. Comece aos poucos e vá aumentando seu conhecimento e seus aportes gradualmente.
+                    </p>
+                </div>
+            </div>
+
+            <div class="card" style="margin-bottom: 2rem; padding: 2rem;">
+                <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
+                    <div style="width: 48px; height: 48px; min-width: 48px; background: linear-gradient(135deg, #10B981, #059669); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                        <span style="color: white; font-size: 1.25rem; font-weight: 700;">1</span>
+                    </div>
+                    <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--text-dark); margin: 0;">
+                        Escolha onde abrir sua conta
+                    </h3>
+                </div>
+                
+                <p style="font-size: 1rem; line-height: 1.7; color: var(--text-light); margin-bottom: 1.5rem;">
+                    Para investir, você precisa de uma conta em uma <strong>corretora de valores</strong> ou em um <strong>banco digital</strong> que ofereça serviços de investimento. 
+                    Estas instituições são regulamentadas pela CVM (Comissão de Valores Mobiliários) e oferecem acesso seguro ao mercado financeiro.
+                </p>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 1.5rem;">
+                    <div style="padding: 1.5rem; background: var(--bg-secondary); border-radius: 12px; border: 1px solid var(--border-color);">
+                        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;">
+                            <svg style="width: 24px; height: 24px; color: var(--success); flex-shrink: 0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M3 21h18"/>
+                                <path d="M5 21V7l7-4 7 4v14"/>
+                                <path d="M9 9v12"/>
+                                <path d="M15 9v12"/>
+                            </svg>
+                            <h4 style="font-size: 1.125rem; font-weight: 600; color: var(--success); margin: 0;">
+                                Corretoras Independentes
+                            </h4>
+                        </div>
+                        <p style="font-size: 0.9375rem; line-height: 1.6; color: var(--text-light); margin-bottom: 1rem;">
+                            Instituições especializadas em investimentos com plataformas completas e diversas opções.
+                        </p>
+                        <ul style="font-size: 0.875rem; color: var(--text-light); line-height: 1.8; margin: 0; padding-left: 1.25rem;">
+                            <li>XP Investimentos</li>
+                            <li>Rico (XP)</li>
+                            <li>Clear (XP)</li>
+                            <li>BTG Pactual Digital</li>
+                            <li>Órama</li>
+                            <li>Genial Investimentos</li>
+                        </ul>
+                    </div>
+
+                    <div style="padding: 1.5rem; background: var(--bg-secondary); border-radius: 12px; border: 1px solid var(--border-color);">
+                        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;">
+                            <svg style="width: 24px; height: 24px; color: var(--info); flex-shrink: 0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+                                <line x1="1" y1="10" x2="23" y2="10"/>
+                            </svg>
+                            <h4 style="font-size: 1.125rem; font-weight: 600; color: var(--info); margin: 0;">
+                                Bancos Digitais
+                            </h4>
+                        </div>
+                        <p style="font-size: 0.9375rem; line-height: 1.6; color: var(--text-light); margin-bottom: 1rem;">
+                            Bancos modernos que já oferecem serviços de investimento integrados à conta corrente.
+                        </p>
+                        <ul style="font-size: 0.875rem; color: var(--text-light); line-height: 1.8; margin: 0; padding-left: 1.25rem;">
+                            <li>Nubank</li>
+                            <li>Inter</li>
+                            <li>C6 Bank</li>
+                            <li>PagBank (PagSeguro)</li>
+                            <li>Mercado Pago</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div style="padding: 1.25rem; background: rgba(59, 130, 246, 0.1); border-radius: 12px; border-left: 4px solid var(--info); display: flex; gap: 0.75rem;">
+                    <svg style="width: 20px; height: 20px; min-width: 20px; color: var(--info); flex-shrink: 0; margin-top: 2px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 18h6"/>
+                        <path d="M10 22h4"/>
+                        <path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0018 8a6 6 0 10-12 0c0 1.36.52 2.5 1.5 3.5.76.76 1.23 1.52 1.41 2.5"/>
+                    </svg>
+                    <p style="font-size: 0.9375rem; color: var(--text-dark); margin: 0; line-height: 1.6;">
+                        <strong>Dica:</strong> Escolha uma instituição com baixas taxas, plataforma fácil de usar e bom atendimento. 
+                        Muitas corretoras não cobram taxa de corretagem para investimentos em renda fixa e têm custo zero para manter a conta.
+                    </p>
+                </div>
+            </div>
+
+            <div class="card" style="margin-bottom: 2rem; padding: 2rem;">
+                <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
+                    <div style="width: 48px; height: 48px; min-width: 48px; background: linear-gradient(135deg, #3B82F6, #2563EB); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                        <span style="color: white; font-size: 1.25rem; font-weight: 700;">2</span>
+                    </div>
+                    <h3 style="font-size: 1.375rem; font-weight: 700; color: var(--text-dark); margin: 0;">
+                        Documentos necessários
+                    </h3>
+                </div>
+
+                <p style="font-size: 1rem; line-height: 1.7; color: var(--text-light); margin-bottom: 1.5rem;">
+                    Para abrir sua conta, você vai precisar de alguns documentos básicos. O processo todo é feito online e leva cerca de 10 a 15 minutos.
+                </p>
+
+                <div style="display: grid; gap: 1rem;">
+                    <div style="display: flex; align-items: flex-start; gap: 1rem; padding: 1rem; background: var(--bg-secondary); border-radius: 8px;">
+                        <div style="width: 24px; height: 24px; min-width: 24px; background: var(--success); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                            <span style="color: white; font-size: 12px; font-weight: 700;">✓</span>
+                        </div>
+                        <div>
+                            <strong style="color: var(--text-dark); display: block; margin-bottom: 0.25rem;">CPF</strong>
+                            <span style="font-size: 0.875rem; color: var(--text-light);">Seu número de CPF (obrigatório para identificação)</span>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; align-items: flex-start; gap: 1rem; padding: 1rem; background: var(--bg-secondary); border-radius: 8px;">
+                        <div style="width: 24px; height: 24px; min-width: 24px; background: var(--success); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                            <span style="color: white; font-size: 12px; font-weight: 700;">✓</span>
+                        </div>
+                        <div>
+                            <strong style="color: var(--text-dark); display: block; margin-bottom: 0.25rem;">RG ou CNH</strong>
+                            <span style="font-size: 0.875rem; color: var(--text-light);">Documento de identificação com foto (frente e verso)</span>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; align-items: flex-start; gap: 1rem; padding: 1rem; background: var(--bg-secondary); border-radius: 8px;">
+                        <div style="width: 24px; height: 24px; min-width: 24px; background: var(--success); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                            <span style="color: white; font-size: 12px; font-weight: 700;">✓</span>
+                        </div>
+                        <div>
+                            <strong style="color: var(--text-dark); display: block; margin-bottom: 0.25rem;">Comprovante de Residência</strong>
+                            <span style="font-size: 0.875rem; color: var(--text-light);">Conta de luz, água, telefone ou internet (últimos 3 meses)</span>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; align-items: flex-start; gap: 1rem; padding: 1rem; background: var(--bg-secondary); border-radius: 8px;">
+                        <div style="width: 24px; height: 24px; min-width: 24px; background: var(--success); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                            <span style="color: white; font-size: 12px; font-weight: 700;">✓</span>
+                        </div>
+                        <div>
+                            <strong style="color: var(--text-dark); display: block; margin-bottom: 0.25rem;">Foto ou Selfie</strong>
+                            <span style="font-size: 0.875rem; color: var(--text-light);">Para validação de identidade (tirada na hora pelo celular)</span>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; align-items: flex-start; gap: 1rem; padding: 1rem; background: var(--bg-secondary); border-radius: 8px;">
+                        <div style="width: 24px; height: 24px; min-width: 24px; background: var(--success); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                            <span style="color: white; font-size: 12px; font-weight: 700;">✓</span>
+                        </div>
+                        <div>
+                            <strong style="color: var(--text-dark); display: block; margin-bottom: 0.25rem;">Dados bancários</strong>
+                            <span style="font-size: 0.875rem; color: var(--text-light);">Número da sua conta corrente para transferências</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="margin-bottom: 2rem; padding: 2rem;">
+                <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
+                    <div style="width: 48px; height: 48px; min-width: 48px; background: linear-gradient(135deg, #F59E0B, #D97706); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                        <span style="color: white; font-size: 1.25rem; font-weight: 700;">3</span>
+                    </div>
+                    <h3 style="font-size: 1.375rem; font-weight: 700; color: var(--text-dark); margin: 0;">
+                        Passo a passo para abrir sua conta
+                    </h3>
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+                    <div style="display: flex; gap: 1rem;">
+                        <div style="font-size: 1.75rem; font-weight: 700; color: var(--accent-primary); line-height: 1;">1.</div>
+                        <div>
+                            <h4 style="font-size: 1.125rem; font-weight: 600; color: var(--text-dark); margin-bottom: 0.5rem;">Acesse o site ou app da instituição escolhida</h4>
+                            <p style="font-size: 0.9375rem; line-height: 1.6; color: var(--text-light); margin: 0;">
+                                Baixe o aplicativo na loja do seu celular (Google Play ou App Store) ou acesse o site oficial. 
+                                Procure pela opção "Abrir conta", "Cadastre-se" ou "Começar a investir".
+                            </p>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 1rem;">
+                        <div style="font-size: 1.75rem; font-weight: 700; color: var(--accent-primary); line-height: 1;">2.</div>
+                        <div>
+                            <h4 style="font-size: 1.125rem; font-weight: 600; color: var(--text-dark); margin-bottom: 0.5rem;">Preencha seus dados pessoais</h4>
+                            <p style="font-size: 0.9375rem; line-height: 1.6; color: var(--text-light); margin: 0;">
+                                Informe nome completo, CPF, data de nascimento, telefone e e-mail. 
+                                Crie uma senha forte (use letras, números e símbolos).
+                            </p>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 1rem;">
+                        <div style="font-size: 1.75rem; font-weight: 700; color: var(--accent-primary); line-height: 1;">3.</div>
+                        <div>
+                            <h4 style="font-size: 1.125rem; font-weight: 600; color: var(--text-dark); margin-bottom: 0.5rem;">Envie os documentos</h4>
+                            <p style="font-size: 0.9375rem; line-height: 1.6; color: var(--text-light); margin: 0;">
+                                Tire fotos claras dos seus documentos ou faça upload das imagens. 
+                                Geralmente você também precisará tirar uma selfie segurando o documento.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 1rem;">
+                        <div style="font-size: 1.75rem; font-weight: 700; color: var(--accent-primary); line-height: 1;">4.</div>
+                        <div>
+                            <h4 style="font-size: 1.125rem; font-weight: 600; color: var(--text-dark); margin-bottom: 0.5rem;">Responda ao perfil de investidor</h4>
+                            <p style="font-size: 0.9375rem; line-height: 1.6; color: var(--text-light); margin: 0;">
+                                Você responderá um questionário (API - Análise de Perfil de Investidor) que ajuda a identificar 
+                                se você é conservador, moderado ou arrojado. Seja honesto nas respostas!
+                            </p>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 1rem;">
+                        <div style="font-size: 1.75rem; font-weight: 700; color: var(--accent-primary); line-height: 1;">5.</div>
+                        <div>
+                            <h4 style="font-size: 1.125rem; font-weight: 600; color: var(--text-dark); margin-bottom: 0.5rem;">Aguarde a aprovação</h4>
+                            <p style="font-size: 0.9375rem; line-height: 1.6; color: var(--text-light); margin: 0;">
+                                A análise dos documentos costuma levar de algumas horas até 2 dias úteis. 
+                                Você receberá um e-mail ou notificação quando sua conta estiver aprovada.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 1rem;">
+                        <div style="font-size: 1.75rem; font-weight: 700; color: var(--accent-primary); line-height: 1;">6.</div>
+                        <div>
+                            <h4 style="font-size: 1.125rem; font-weight: 600; color: var(--text-dark); margin-bottom: 0.5rem;">Transfira dinheiro e comece a investir</h4>
+                            <p style="font-size: 0.9375rem; line-height: 1.6; color: var(--text-light); margin: 0;">
+                                Faça uma transferência (TED ou PIX) da sua conta bancária para a corretora. 
+                                Quando o dinheiro cair (geralmente no mesmo dia), você já pode começar a investir!
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="margin-bottom: 2rem; padding: 2rem;">
+                <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
+                    <div style="width: 48px; height: 48px; min-width: 48px; background: linear-gradient(135deg, #8B5CF6, #7C3AED); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                        <span style="color: white; font-size: 1.25rem; font-weight: 700;">4</span>
+                    </div>
+                    <h3 style="font-size: 1.375rem; font-weight: 700; color: var(--text-dark); margin: 0;">
+                        Fazendo seu primeiro investimento
+                    </h3>
+                </div>
+
+                <p style="font-size: 1rem; line-height: 1.7; color: var(--text-light); margin-bottom: 1.5rem;">
+                    Com a conta aprovada e o dinheiro disponível, está na hora de fazer seu primeiro investimento. Aqui vai uma dica de ouro:
+                </p>
+
+                <div style="padding: 1.5rem; background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(5, 150, 105, 0.15)); border-radius: 12px; border: 2px solid rgba(16, 185, 129, 0.3); margin-bottom: 1.5rem;">
+                    <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+                        <svg style="width: 24px; height: 24px; color: var(--success); flex-shrink: 0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+                        </svg>
+                        <h4 style="font-size: 1.125rem; font-weight: 700; color: var(--success); margin: 0;">
+                            Recomendação para iniciantes
+                        </h4>
+                    </div>
+                    <p style="font-size: 0.9375rem; line-height: 1.7; color: var(--text-dark); margin-bottom: 1rem;">
+                        Comece com investimentos de <strong>renda fixa e baixo risco</strong>, como:
+                    </p>
+                    <ul style="font-size: 0.9375rem; line-height: 1.8; color: var(--text-dark); margin: 0 0 1rem 1.25rem;">
+                        <li><strong>Tesouro Selic:</strong> Liquidez diária, pode resgatar quando quiser</li>
+                        <li><strong>CDB de liquidez diária:</strong> Rentabilidade acima da poupança</li>
+                        <li><strong>Fundos DI:</strong> Gestão profissional com baixo risco</li>
+                    </ul>
+                    <p style="font-size: 0.875rem; color: var(--text-muted); margin: 0; font-style: italic;">
+                        Esses investimentos são seguros, fáceis de entender e permitem que você se familiarize com a plataforma sem correr grandes riscos.
+                    </p>
+                </div>
+
+                <h4 style="font-size: 1.125rem; font-weight: 600; color: var(--text-dark); margin-bottom: 1rem;">
+                    Como fazer o investimento na prática:
+                </h4>
+
+                <ol style="font-size: 0.9375rem; line-height: 1.8; color: var(--text-light); margin: 0 0 0 1.5rem; padding: 0;">
+                    <li style="margin-bottom: 0.75rem;">Acesse a área de investimentos no app ou site</li>
+                    <li style="margin-bottom: 0.75rem;">Procure por "Renda Fixa" ou "Tesouro Direto"</li>
+                    <li style="margin-bottom: 0.75rem;">Escolha o investimento (ex: Tesouro Selic 2029)</li>
+                    <li style="margin-bottom: 0.75rem;">Digite o valor que deseja investir</li>
+                    <li style="margin-bottom: 0.75rem;">Confirme a operação com sua senha</li>
+                    <li>Pronto! Seu investimento estará ativo em alguns instantes</li>
+                </ol>
+            </div>
+
+            <div class="card" style="margin-bottom: 2rem; padding: 2rem; background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(220, 38, 38, 0.1)); border-left: 4px solid var(--danger);">
+                <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+                    <svg style="width: 28px; height: 28px; color: var(--danger); flex-shrink: 0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    </svg>
+                    <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--danger); margin: 0;">
+                        Dicas importantes de segurança
+                    </h3>
+                </div>
+                <ul style="font-size: 0.9375rem; line-height: 1.8; color: var(--text-dark); margin: 0; padding-left: 1.5rem;">
+                    <li><strong>Nunca compartilhe sua senha</strong> com ninguém, nem mesmo com funcionários da corretora</li>
+                    <li><strong>Ative a autenticação em duas etapas</strong> (2FA) para maior segurança</li>
+                    <li><strong>Cuidado com promessas de retorno garantido:</strong> se parece bom demais, provavelmente é golpe</li>
+                    <li><strong>Não invista dinheiro que você vai precisar no curto prazo</strong> - tenha uma reserva de emergência primeiro</li>
+                    <li><strong>Diversifique:</strong> não coloque todo seu dinheiro em um único investimento</li>
+                    <li><strong>Estude antes de investir:</strong> entenda onde está colocando seu dinheiro</li>
+                </ul>
+            </div>
+
+            <div class="card" style="padding: 2rem; text-align: center; background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));">
+                <div style="display: flex; align-items: center; justify-content: center; gap: 0.75rem; margin-bottom: 1rem;">
+                    <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--text-dark); margin: 0;">
+                        Pronto para começar?
+                    </h3>
+                    <svg style="width: 28px; height: 28px; color: var(--accent-primary); flex-shrink: 0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 00-2.91-.09z"/>
+                        <path d="M12 15l-3-3a22 22 0 012-3.95A12.88 12.88 0 0122 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 01-4 2z"/>
+                        <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/>
+                        <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/>
+                    </svg>
+                </div>
+                <p style="font-size: 1rem; line-height: 1.7; color: var(--text-light); margin-bottom: 1.5rem;">
+                    Agora que você já sabe como abrir sua conta e fazer seus primeiros investimentos, 
+                    explore nossa seção de <strong>Educação Financeira</strong> para entender melhor cada tipo de investimento 
+                    e descubra seu <strong>Perfil de Investidor</strong> com nosso questionário!
+                </p>
+                <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                    <button class="btn btn-primary" onclick="navigateToPage('home')" style="display: flex; align-items: center; gap: 0.5rem;">
+                        <svg class="icon" style="width: 20px; height: 20px;">
+                            <use href="svgs/icons.svg#icon-book"></use>
+                        </svg>
+                        Ir para Educação
+                    </button>
+                    <button class="btn btn-outline" onclick="navigateToPage('profile')" style="display: flex; align-items: center; gap: 0.5rem;">
+                        <svg class="icon" style="width: 20px; height: 20px;">
+                            <use href="svgs/icons.svg#icon-user"></use>
+                        </svg>
+                        Descobrir meu Perfil
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    `;
 }
 
 // ===== MODAL DE RECOMENDAÇÕES =====

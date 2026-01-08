@@ -39,12 +39,46 @@
         <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-logo">
-                <h1>
-                    <svg class="logo-icon">
-                        <use href="svgs/icons.svg#icon-chart"></use>
-                    </svg>
-                    rafaInvest
-                </h1>
+                <svg width="220" height="60" viewBox="0 0 220 60" style="display: block; position: relative; z-index: 100;">
+                    <defs>
+                        <linearGradient id="gradient-logo" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#6366F1;stop-opacity:1" />
+                            <stop offset="50%" style="stop-color:#8B5CF6;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#A855F7;stop-opacity:1" />
+                        </linearGradient>
+                        <filter id="glow">
+                            <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+                            <feMerge>
+                                <feMergeNode in="coloredBlur"/>
+                                <feMergeNode in="SourceGraphic"/>
+                            </feMerge>
+                        </filter>
+                    </defs>
+                    
+                    <!-- Ícone do gráfico -->
+                    <g transform="translate(5, 12)">
+                        <path d="M5 32 L12 27 L19 22 L26 12 L33 16 L40 5" 
+                              stroke="url(#gradient-logo)" 
+                              stroke-width="3.5" 
+                              fill="none" 
+                              stroke-linecap="round" 
+                              stroke-linejoin="round"
+                              filter="url(#glow)"/>
+                        <circle cx="12" cy="27" r="3.5" fill="url(#gradient-logo)" filter="url(#glow)"/>
+                        <circle cx="19" cy="22" r="3.5" fill="url(#gradient-logo)" filter="url(#glow)"/>
+                        <circle cx="26" cy="12" r="4" fill="url(#gradient-logo)" filter="url(#glow)"/>
+                        <circle cx="33" cy="16" r="3.5" fill="url(#gradient-logo)" filter="url(#glow)"/>
+                        <circle cx="40" cy="5" r="4" fill="url(#gradient-logo)" filter="url(#glow)"/>
+                    </g>
+                    
+                    <!-- Texto "rafaInvest" -->
+                    <text x="58" y="38" 
+                          font-family="'Poppins', sans-serif" 
+                          font-size="28" 
+                          font-weight="800" 
+                          letter-spacing="-0.5"
+                          fill="#E5E7EB">rafa<tspan fill="url(#gradient-logo)" filter="url(#glow)">Invest</tspan></text>
+                </svg>
             </div>
 
             <nav>
@@ -55,6 +89,14 @@
                                 <use href="svgs/icons.svg#icon-home"></use>
                             </svg>
                             <span>Educação</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-nav-item">
+                        <a href="#" class="sidebar-nav-link" data-page="getting-started">
+                            <svg class="icon">
+                                <use href="svgs/icons.svg#icon-book"></use>
+                            </svg>
+                            <span>Como Começar</span>
                         </a>
                     </li>
                     <li class="sidebar-nav-item">
@@ -109,10 +151,17 @@
         <!-- Conteúdo Principal -->
         <main class="main-content">
             
-            <!-- Header Dinâmico -->
-            <div class="content-header" id="contentHeader">
-                <h2 id="pageTitle">Educação Financeira</h2>
-                <p id="pageSubtitle">Aprenda sobre investimentos de forma simples e clara</p>
+            <!-- Hero Section -->
+            <div class="hero-section" id="heroSection">
+                <div class="hero-overlay"></div>
+                <div class="hero-content">
+                    <h1 class="hero-title" id="heroTitle">Realize seus sonhos com investimentos inteligentes!</h1>
+                    <p class="hero-subtitle" id="heroSubtitle">Aprenda sobre investimentos de forma simples e clara. Descubra seu perfil e comece a investir com confiança.</p>
+                    <div class="hero-buttons">
+                        <button class="btn-hero-primary" onclick="document.querySelector('[data-page=getting-started]').click()">Comece Agora</button>
+                        <button class="btn-hero-secondary" onclick="document.querySelector('[data-page=dashboard]').click()">Ver Dashboard</button>
+                    </div>
+                </div>
             </div>
 
             <!-- Body do Conteúdo -->
@@ -138,10 +187,10 @@
                             
                             <!-- Conteúdo -->
                             <div style="flex: 1;">
-                                <h2 style="font-family: 'Poppins', sans-serif; font-size: 1.75rem; font-weight: 700; color: var(--text-dark); margin-bottom: 0.75rem; letter-spacing: -0.02em;">
+                                <h2 style="font-family: 'Poppins', sans-serif; font-size: 1.375rem; font-weight: 700; color: var(--text-dark); margin-bottom: 0.75rem; letter-spacing: -0.02em;">
                                     Bem-vindo ao rafaInvest
                                 </h2>
-                                <p style="font-size: 1rem; color: var(--text-light); line-height: 1.7; margin: 0;">
+                                <p style="font-size: 0.9375rem; color: var(--text-light); line-height: 1.6; margin: 0;">
                                     Um painel educacional para te ajudar a entender o básico de investimentos e entrar nesse mundo com confiança. Aqui você vai aprender sobre as principais opções do mercado, descobrir seu perfil de investidor e fazer simulações práticas.
                                 </p>
                             </div>
@@ -150,7 +199,7 @@
 
                     <!-- O que são essas siglas? -->
                     <div class="mb-4">
-                        <h3 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--text-dark);">
+                        <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--text-dark);">
                             O que são essas siglas?
                         </h3>
                         
@@ -161,7 +210,7 @@
 
                     <!-- Perfis de Investidor -->
                     <div class="mb-4">
-                        <h3 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--text-dark);">
+                        <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--text-dark);">
                             Perfis de Investidor
                         </h3>
                         
@@ -228,7 +277,12 @@
                     </div>
 
                 </section>
-
+                <!-- ===== PÁGINA COMO COMEÇAR ===== -->
+                <section class="page-section" id="page-getting-started">
+                    <div id="gettingStartedContent">
+                        <!-- Conteúdo será injetado via JS -->
+                    </div>
+                </section>
                 <!-- ========================================
                      PÁGINA: DASHBOARD
                      ======================================== -->
@@ -258,7 +312,7 @@
                     </div>
 
                     <!-- Gráficos -->
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 1.5rem; margin-top: 2rem;">
+                    <div class="dashboard-charts-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 2rem;">
                         <div class="card">
                             <h3 class="card-title">
                                 <svg class="icon">
@@ -275,7 +329,7 @@
                                 </svg>
                                 FIIs por Dividend Yield
                             </h3>
-                            <canvas id="fiisChart" style="margin-top: 1rem;"></canvas>
+                            <div id="fiisTable" style="margin-top: 1rem;"></div>
                         </div>
                     </div>
 
@@ -307,9 +361,9 @@
                 <!-- ========================================
                      PÁGINA: CALCULADORAS
                      ======================================== -->
-                <section class="page-section" id="page-calculators">
+<section class="page-section" id="page-calculators">
                     
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 2rem;">
+                    <div class="calculators-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
                         
                         <!-- Calculadora de Financiamento -->
                         <div class="card">
