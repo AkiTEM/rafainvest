@@ -194,6 +194,13 @@
     <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/>
   </symbol>
 
+  <!-- Info Circle / Importante -->
+  <symbol id="icon-info-circle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <circle cx="12" cy="12" r="10"/>
+    <line x1="12" y1="16" x2="12" y2="12"/>
+    <line x1="12" y1="8" x2="12.01" y2="8"/>
+  </symbol>
+
   <!-- Logo rafaInvest -->
   <symbol id="logo-rafa" viewBox="0 0 200 60" fill="none">
     <!-- Gráfico de linha estilizado -->
