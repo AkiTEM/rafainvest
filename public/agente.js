@@ -4,9 +4,7 @@
    =============================================== */
 
 // ==================== CONFIGURAÇÕES ====================
-const API_BASE = window.location.hostname === 'localhost' 
-    ? 'http://localhost:3000/.netlify/functions'
-    : '/.netlify/functions';
+// API_BASE é definido em app.js (compartilhado)
 
 const AGENT_CONFIG = {
     maxHistory: 10,        // Máximo de mensagens no histórico
