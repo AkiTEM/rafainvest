@@ -362,6 +362,7 @@ body.menu-open {
     letter-spacing: -0.02em;
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 1rem;
 }
 
@@ -370,14 +371,31 @@ body.menu-open {
     margin-top: -0.25rem;
 }
 
+.page-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
 .page-title {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     gap: 0.75rem;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 0.75rem;
 }
 
 .page-title .icon {
     flex-shrink: 0;
+}
+
+.page-subtitle {
+    font-size: 1.125rem;
+    color: var(--text-light);
+    line-height: 1.6;
+    max-width: 600px;
+    margin: 0 auto;
 }
 
 .hero-subtitle {
