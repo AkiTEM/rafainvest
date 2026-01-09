@@ -7,6 +7,7 @@
     <meta name="description" content="Plataforma educacional para aprender sobre investimentos: CDB, FIIs, Tesouro Direto, Criptomoedas e mais.">
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="quiz.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
 </head>
 <body>
@@ -125,6 +126,22 @@
                                 <use href="svgs/icons.svg#icon-user"></use>
                             </svg>
                             <span>Projeções & Perfil</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-nav-item">
+                        <a href="#" class="sidebar-nav-link" data-page="income-types">
+                            <svg class="icon">
+                                <use href="svgs/icons.svg#icon-wallet"></use>
+                            </svg>
+                            <span>Tipos de Rendas</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-nav-item">
+                        <a href="#" class="sidebar-nav-link" data-page="quiz">
+                            <svg class="icon">
+                                <use href="svgs/icons.svg#icon-lightbulb"></use>
+                            </svg>
+                            <span>Quiz Financeiro</span>
                         </a>
                     </li>
                     
@@ -486,7 +503,7 @@
 
                             <form id="quizForm">
                                 <!-- Perguntas injetadas via JS -->
-                                <div id="quizQuestions"></div>
+                                <div id="profileQuestions"></div>
                                 <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1.5rem;">Ver meu perfil</button>
                             </form>
                         </div>
@@ -546,6 +563,306 @@
 
                     </div>
 
+                </section>
+
+                <!-- ========================================
+                     PÁGINA: TIPOS DE RENDAS
+                     ======================================== -->
+                <section class="page-section" id="page-income-types">
+                    <div style="max-width: 900px; margin: 0 auto;">
+                        <div class="page-header">
+                            <h1 class="page-title">
+                                <svg class="icon" style="width: 36px; height: 36px;">
+                                    <use href="svgs/icons.svg#icon-wallet"></use>
+                                </svg>
+                                Tipos de Rendas
+                            </h1>
+                            <p class="page-subtitle">
+                                Entenda as diferentes formas de gerar renda e construa sua estratégia de liberdade financeira
+                            </p>
+                        </div>
+
+                        <!-- Renda Ativa -->
+                        <div class="card mb-4">
+                            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
+                                <div style="width: 56px; height: 56px; background: linear-gradient(135deg, #EF4444, #DC2626); border-radius: 12px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);">
+                                    <svg class="icon" style="width: 28px; height: 28px; color: white;">
+                                        <use href="svgs/icons.svg#icon-user"></use>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h3 style="font-size: 1.5rem; font-weight: 700; color: var(--text-dark); margin: 0;">Renda Ativa</h3>
+                                    <p style="color: var(--text-light); margin: 0; font-size: 0.875rem;">Você troca seu tempo por dinheiro</p>
+                                </div>
+                            </div>
+
+                            <div style="margin-bottom: 1.5rem;">
+                                <p style="color: var(--text-dark); line-height: 1.7; margin-bottom: 1rem;">
+                                    A <strong>renda ativa</strong> é aquela que você recebe em troca do seu trabalho direto. É o tipo mais comum e imediato de renda, onde você <strong>troca seu tempo e esforço por dinheiro</strong>.
+                                </p>
+                                <p style="color: var(--text-dark); line-height: 1.7; margin-bottom: 1rem;">
+                                    <strong>Característica principal:</strong> Se você parar de trabalhar, a renda para de entrar.
+                                </p>
+                            </div>
+
+                            <div style="background: rgba(239, 68, 68, 0.05); padding: 1.25rem; border-radius: 0.75rem; border-left: 4px solid #EF4444; margin-bottom: 1.5rem;">
+                                <h4 style="font-size: 1rem; font-weight: 600; color: var(--text-dark); margin-bottom: 0.75rem;">📌 Exemplos de Renda Ativa:</h4>
+                                <ul style="margin: 0; padding-left: 1.5rem; color: var(--text-dark); line-height: 1.8;">
+                                    <li><strong>Salário CLT:</strong> Trabalho como funcionário em uma empresa</li>
+                                    <li><strong>Autônomo:</strong> Prestação de serviços (designer, programador, eletricista)</li>
+                                    <li><strong>Profissional Liberal:</strong> Médicos, advogados, dentistas</li>
+                                    <li><strong>Comissões:</strong> Vendedores que recebem por cada venda realizada</li>
+                                    <li><strong>Freela:</strong> Trabalhos pontuais e projetos específicos</li>
+                                </ul>
+                            </div>
+
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                                <div style="background: rgba(16, 185, 129, 0.08); padding: 1rem; border-radius: 0.5rem;">
+                                    <div style="font-weight: 600; color: var(--success); margin-bottom: 0.5rem;">✅ Vantagens:</div>
+                                    <ul style="margin: 0; padding-left: 1.25rem; font-size: 0.875rem; color: var(--text-dark); line-height: 1.6;">
+                                        <li>Renda imediata e previsível</li>
+                                        <li>Controle total sobre seus ganhos</li>
+                                        <li>Não requer capital inicial</li>
+                                        <li>Desenvolve habilidades profissionais</li>
+                                    </ul>
+                                </div>
+                                <div style="background: rgba(239, 68, 68, 0.08); padding: 1rem; border-radius: 0.5rem;">
+                                    <div style="font-weight: 600; color: var(--danger); margin-bottom: 0.5rem;">⚠️ Desvantagens:</div>
+                                    <ul style="margin: 0; padding-left: 1.25rem; font-size: 0.875rem; color: var(--text-dark); line-height: 1.6;">
+                                        <li>Limitada por suas horas de trabalho</li>
+                                        <li>Não escala sem aumentar o tempo</li>
+                                        <li>Para de gerar se você parar</li>
+                                        <li>Dificulta liberdade financeira</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Renda Passiva -->
+                        <div class="card mb-4">
+                            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
+                                <div style="width: 56px; height: 56px; background: linear-gradient(135deg, #10B981, #059669); border-radius: 12px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);">
+                                    <svg class="icon" style="width: 28px; height: 28px; color: white;">
+                                        <use href="svgs/icons.svg#icon-trending-up"></use>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h3 style="font-size: 1.5rem; font-weight: 700; color: var(--text-dark); margin: 0;">Renda Passiva</h3>
+                                    <p style="color: var(--text-light); margin: 0; font-size: 0.875rem;">Seu dinheiro trabalha por você</p>
+                                </div>
+                            </div>
+
+                            <div style="margin-bottom: 1.5rem;">
+                                <p style="color: var(--text-dark); line-height: 1.7; margin-bottom: 1rem;">
+                                    A <strong>renda passiva</strong> é aquela que continua entrando <strong>mesmo quando você não está trabalhando ativamente</strong>. Ela é gerada por investimentos, ativos ou sistemas que funcionam de forma automática.
+                                </p>
+                                <p style="color: var(--text-dark); line-height: 1.7; margin-bottom: 1rem;">
+                                    <strong>Característica principal:</strong> Requer esforço ou capital inicial, mas depois funciona com pouco ou nenhum trabalho ativo.
+                                </p>
+                            </div>
+
+                            <div style="background: rgba(16, 185, 129, 0.05); padding: 1.25rem; border-radius: 0.75rem; border-left: 4px solid #10B981; margin-bottom: 1.5rem;">
+                                <h4 style="font-size: 1rem; font-weight: 600; color: var(--text-dark); margin-bottom: 0.75rem;">📌 Exemplos de Renda Passiva:</h4>
+                                <ul style="margin: 0; padding-left: 1.5rem; color: var(--text-dark); line-height: 1.8;">
+                                    <li><strong>Dividendos:</strong> Lucros distribuídos por ações e FIIs</li>
+                                    <li><strong>Juros:</strong> Rendimento de CDB, Tesouro Direto, poupança</li>
+                                    <li><strong>Aluguel:</strong> Renda de imóveis locados (físicos ou FIIs)</li>
+                                    <li><strong>Royalties:</strong> Direitos autorais de livros, músicas, cursos</li>
+                                    <li><strong>Negócios Automatizados:</strong> E-commerce, apps, infoprodutos</li>
+                                </ul>
+                            </div>
+
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                                <div style="background: rgba(16, 185, 129, 0.08); padding: 1rem; border-radius: 0.5rem;">
+                                    <div style="font-weight: 600; color: var(--success); margin-bottom: 0.5rem;">✅ Vantagens:</div>
+                                    <ul style="margin: 0; padding-left: 1.25rem; font-size: 0.875rem; color: var(--text-dark); line-height: 1.6;">
+                                        <li>Renda contínua sem trabalho ativo</li>
+                                        <li>Liberdade de tempo</li>
+                                        <li>Escala sem aumentar esforço</li>
+                                        <li>Caminho para independência financeira</li>
+                                    </ul>
+                                </div>
+                                <div style="background: rgba(239, 68, 68, 0.08); padding: 1rem; border-radius: 0.5rem;">
+                                    <div style="font-weight: 600; color: var(--danger); margin-bottom: 0.5rem;">⚠️ Desvantagens:</div>
+                                    <ul style="margin: 0; padding-left: 1.25rem; font-size: 0.875rem; color: var(--text-dark); line-height: 1.6;">
+                                        <li>Requer capital ou tempo inicial</li>
+                                        <li>Demora para gerar resultados</li>
+                                        <li>Pode ter riscos (investimentos)</li>
+                                        <li>Precisa de manutenção ocasional</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Renda Recorrente -->
+                        <div class="card mb-4">
+                            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
+                                <div style="width: 56px; height: 56px; background: linear-gradient(135deg, #3B82F6, #2563EB); border-radius: 12px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);">
+                                    <svg class="icon" style="width: 28px; height: 28px; color: white;">
+                                        <use href="svgs/icons.svg#icon-credit-card"></use>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h3 style="font-size: 1.5rem; font-weight: 700; color: var(--text-dark); margin: 0;">Renda Recorrente</h3>
+                                    <p style="color: var(--text-light); margin: 0; font-size: 0.875rem;">Pagamentos automáticos periódicos</p>
+                                </div>
+                            </div>
+
+                            <div style="margin-bottom: 1.5rem;">
+                                <p style="color: var(--text-dark); line-height: 1.7; margin-bottom: 1rem;">
+                                    A <strong>renda recorrente</strong> é aquela gerada por <strong>pagamentos periódicos e previsíveis</strong> de clientes ou usuários. Muito comum em modelos de assinatura e serviços contínuos.
+                                </p>
+                                <p style="color: var(--text-dark); line-height: 1.7; margin-bottom: 1rem;">
+                                    <strong>Característica principal:</strong> Combina elementos da renda ativa (precisa de manutenção) com a passiva (automatização possível).
+                                </p>
+                            </div>
+
+                            <div style="background: rgba(59, 130, 246, 0.05); padding: 1.25rem; border-radius: 0.75rem; border-left: 4px solid #3B82F6; margin-bottom: 1.5rem;">
+                                <h4 style="font-size: 1rem; font-weight: 600; color: var(--text-dark); margin-bottom: 0.75rem;">📌 Exemplos de Renda Recorrente:</h4>
+                                <ul style="margin: 0; padding-left: 1.5rem; color: var(--text-dark); line-height: 1.8;">
+                                    <li><strong>SaaS:</strong> Software como serviço (Netflix, Spotify, etc.)</li>
+                                    <li><strong>Assinaturas:</strong> Clubes, memberships, cursos mensais</li>
+                                    <li><strong>Serviços Continuados:</strong> Manutenção, consultoria recorrente</li>
+                                    <li><strong>Contratos Fixos:</strong> Prestação de serviço com valor mensal</li>
+                                </ul>
+                            </div>
+
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                                <div style="background: rgba(16, 185, 129, 0.08); padding: 1rem; border-radius: 0.5rem;">
+                                    <div style="font-weight: 600; color: var(--success); margin-bottom: 0.5rem;">✅ Vantagens:</div>
+                                    <ul style="margin: 0; padding-left: 1.25rem; font-size: 0.875rem; color: var(--text-dark); line-height: 1.6;">
+                                        <li>Previsibilidade de receita</li>
+                                        <li>Escalável com automação</li>
+                                        <li>Valorização do negócio</li>
+                                        <li>Fluxo de caixa estável</li>
+                                    </ul>
+                                </div>
+                                <div style="background: rgba(239, 68, 68, 0.08); padding: 1rem; border-radius: 0.5rem;">
+                                    <div style="font-weight: 600; color: var(--danger); margin-bottom: 0.5rem;">⚠️ Desvantagens:</div>
+                                    <ul style="margin: 0; padding-left: 1.25rem; font-size: 0.875rem; color: var(--text-dark); line-height: 1.6;">
+                                        <li>Risco de cancelamentos</li>
+                                        <li>Precisa manter qualidade</li>
+                                        <li>Concorrência alta em alguns nichos</li>
+                                        <li>Pode exigir suporte constante</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Estratégia Combinada -->
+                        <div class="card" style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1)); border: 2px solid rgba(99, 102, 241, 0.2);">
+                            <div style="text-align: center; margin-bottom: 1.5rem;">
+                                <h3 style="font-size: 1.5rem; font-weight: 700; color: var(--accent-primary); margin-bottom: 0.5rem;">🎯 Estratégia Inteligente</h3>
+                                <p style="color: var(--text-dark); font-size: 0.9375rem;">Combine os três tipos para construir riqueza sustentável</p>
+                            </div>
+
+                            <div style="background: white; padding: 1.5rem; border-radius: 0.75rem; margin-bottom: 1.5rem;">
+                                <h4 style="font-size: 1.125rem; font-weight: 600; color: var(--text-dark); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                                    <svg style="width: 1.25rem; height: 1.25rem; color: var(--accent-primary); flex-shrink: 0;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                        <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+                                        <polyline points="17 6 23 6 23 12"/>
+                                    </svg>
+                                    <span>O Caminho Recomendado:</span>
+                                </h4>
+                                
+                                <div style="display: flex; flex-direction: column; gap: 1rem;">
+                                    <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                                        <div style="min-width: 32px; height: 32px; background: #EF4444; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 0.875rem;">1</div>
+                                        <div>
+                                            <strong style="color: var(--text-dark);">Fase Inicial:</strong>
+                                            <p style="margin: 0.25rem 0 0 0; color: var(--text-light); font-size: 0.875rem; line-height: 1.6;">
+                                                Foque em <strong>renda ativa</strong> para gerar capital. Invista em sua carreira, aumente seu salário, aprenda novas habilidades.
+                                            </p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                                        <div style="min-width: 32px; height: 32px; background: #3B82F6; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 0.875rem;">2</div>
+                                        <div>
+                                            <strong style="color: var(--text-dark);">Fase de Crescimento:</strong>
+                                            <p style="margin: 0.25rem 0 0 0; color: var(--text-light); font-size: 0.875rem; line-height: 1.6;">
+                                                Use parte da renda ativa para construir <strong>renda recorrente</strong> ou iniciar investimentos para renda passiva. Comece aos poucos.
+                                            </p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                                        <div style="min-width: 32px; height: 32px; background: #10B981; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 0.875rem;">3</div>
+                                        <div>
+                                            <strong style="color: var(--text-dark);">Fase de Liberdade:</strong>
+                                            <p style="margin: 0.25rem 0 0 0; color: var(--text-light); font-size: 0.875rem; line-height: 1.6;">
+                                                Quando a <strong>renda passiva</strong> cobrir suas despesas mensais, você alcançou a liberdade financeira! Trabalhe porque quer, não porque precisa.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div style="background: rgba(255, 255, 255, 0.7); padding: 1.25rem; border-radius: 0.5rem;">
+                                <p style="margin: 0; color: var(--text-dark); font-weight: 500; line-height: 1.7; display: flex; align-items: flex-start; gap: 0.5rem;">
+                                    <svg style="width: 1.25rem; height: 1.25rem; color: #F59E0B; flex-shrink: 0; margin-top: 0.15rem;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                        <path d="M9 18h6"/>
+                                        <path d="M10 22h4"/>
+                                        <path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0018 8a6 6 0 10-12 0c0 1.36.52 2.5 1.5 3.5.76.76 1.23 1.52 1.41 2.5"/>
+                                    </svg>
+                                    <span><strong>Lembre-se:</strong> Não existe renda 100% passiva sem esforço inicial. O segredo é começar com renda ativa, reinvestir com inteligência e construir seu império financeiro gradualmente!</span>
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+
+                <!-- ========================================
+                     PÁGINA: QUIZ FINANCEIRO
+                     ======================================== -->
+                <section class="page-section" id="page-quiz">
+                    <div style="max-width: 800px; margin: 0 auto;">
+                        <div class="page-header">
+                            <h1 class="page-title">
+                                <svg class="icon" style="width: 36px; height: 36px;">
+                                    <use href="svgs/icons.svg#icon-lightbulb"></use>
+                                </svg>
+                                Quiz Financeiro
+                            </h1>
+                            <p class="page-subtitle">
+                                Teste seus conhecimentos sobre finanças e investimentos de forma divertida!
+                            </p>
+                        </div>
+                        <div id="quizContainer" class="card">
+                            <div id="quizIntro" style="text-align: center; padding: 2rem 0;">
+                                <div style="font-size: 4rem; margin-bottom: 1rem;">🎯</div>
+                                <h3 style="font-size: 1.5rem; font-weight: 700; color: var(--text-dark); margin-bottom: 1rem;">Pronto para o desafio?</h3>
+                                <p style="color: var(--text-light); margin-bottom: 2rem; line-height: 1.7;">
+                                    São <strong>12 perguntas</strong> sobre finanças pessoais e investimentos.<br>
+                                    No final, você receberá um resultado criativo e engraçado! 😄
+                                </p>
+                                <button class="btn btn-primary" onclick="startQuiz()" style="font-size: 1.125rem; padding: 0.875rem 2rem;">Começar Quiz!</button>
+                            </div>
+                            <div id="quizQuestions" style="display: none;">
+                                <div id="quizProgress" style="margin-bottom: 2rem;">
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                        <span style="font-size: 0.875rem; color: var(--text-light);">Pergunta <span id="currentQuestion">1</span> de 12</span>
+                                        <span style="font-size: 0.875rem; color: var(--accent-primary); font-weight: 600;"><span id="quizScore">0</span> pontos</span>
+                                    </div>
+                                    <div style="background: var(--border-light); height: 8px; border-radius: 4px; overflow: hidden;">
+                                        <div id="progressBar" style="background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary)); height: 100%; width: 0%; transition: width 0.3s ease;"></div>
+                                    </div>
+                                </div>
+                                <div id="questionCard"></div>
+                            </div>
+                            <div id="quizResult" style="display: none; text-align: center; padding: 2rem 0;">
+                                <div id="resultEmoji" style="font-size: 5rem; margin-bottom: 1rem;">🎉</div>
+                                <h3 id="resultTitle" style="font-size: 1.75rem; font-weight: 700; margin-bottom: 0.5rem;"></h3>
+                                <p id="resultSubtitle" style="font-size: 1.125rem; color: var(--accent-primary); margin-bottom: 1.5rem;"></p>
+                                <div id="resultDescription" style="color: var(--text-dark); line-height: 1.7; margin-bottom: 2rem; padding: 1.5rem; background: rgba(99, 102, 241, 0.05); border-radius: 0.75rem; text-align: left;"></div>
+                                <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                                    <button class="btn btn-primary" onclick="startQuiz()">Tentar Novamente</button>
+                                    <button class="btn btn-secondary" onclick="navigateToHome()">Voltar ao Início</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </section>
 
             </div>

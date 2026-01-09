@@ -114,6 +114,14 @@ function updatePageHeader(page) {
         profile: {
             title: 'Projeções & Perfil',
             subtitle: 'Descubra seu perfil de investidor e simule sua carteira'
+        },
+        'income-types': {
+            title: 'Tipos de Renda',
+            subtitle: 'Entenda as diferenças entre Renda Fixa e Renda Variável'
+        },
+        quiz: {
+            title: 'Quiz Financeiro',
+            subtitle: 'Teste seus conhecimentos sobre finanças e investimentos de forma divertida!'
         }
     };
     
@@ -1313,7 +1321,7 @@ function calculateInvestment() {
 
 // ===== PERFIL & PROJEÇÕES =====
 function renderProfileQuiz() {
-    const container = document.getElementById('quizQuestions');
+    const container = document.getElementById('profileQuestions');
     if (!container || !state.data.educacao) return;
     
     container.innerHTML = state.data.educacao.quiz.map((q, index) => `
@@ -1979,3 +1987,271 @@ function renderRecommendations(recs) {
         </div>
     `;
 }
+
+// ===== QUIZ FINANCEIRO =====
+const quizQuestions = [
+    {
+        question: "O que é liquidez em um investimento?",
+        options: ["O quanto ele rende por mês", "A facilidade de transformar o investimento em dinheiro", "O risco de perder dinheiro", "A taxa cobrada pelo banco"],
+        correct: 1,
+        explanation: "Liquidez é a facilidade e rapidez com que você consegue transformar um investimento em dinheiro sem perder valor."
+    },
+    {
+        question: "Qual é a regra de ouro do investimento?",
+        options: ["Investir tudo em um único ativo", "Nunca diversificar", "Não colocar todos os ovos na mesma cesta", "Sempre seguir dicas de grupos do WhatsApp"],
+        correct: 2,
+        explanation: "Diversificação é fundamental! Espalhar seus investimentos reduz o risco de grandes perdas."
+    },
+    {
+        question: "O que significa CDI?",
+        options: ["Centro de Dinheiro Imediato", "Certificado de Depósito Interbancário", "Conta Digital Investimentos", "Cupom de Desconto para Investir"],
+        correct: 1,
+        explanation: "O CDI é a taxa média de juros dos empréstimos entre bancos e serve como referência para muitos investimentos."
+    },
+    {
+        question: "Qual investimento é mais seguro?",
+        options: ["Criptomoedas", "Tesouro Direto", "Day Trade", "Apostas esportivas"],
+        correct: 1,
+        explanation: "O Tesouro Direto é garantido pelo governo federal e considerado o investimento mais seguro do Brasil."
+    },
+    {
+        question: "O que são FIIs?",
+        options: ["Fundos de Investimento Imobiliário", "Finanças Inteligentes Integrais", "Fundos Internacionais de Investimento", "Fórmula de Investimento Instantâneo"],
+        correct: 0,
+        explanation: "FIIs são Fundos de Investimento Imobiliário - você investe em imóveis sem precisar comprá-los diretamente!"
+    },
+    {
+        question: "Qual a diferença entre ações e FIIs?",
+        options: ["Nenhuma diferença", "Ações são de empresas, FIIs são de imóveis", "FIIs só existem nos EUA", "Ações rendem mais sempre"],
+        correct: 1,
+        explanation: "Ações representam parte de empresas, enquanto FIIs representam parte de empreendimentos imobiliários."
+    },
+    {
+        question: "O que é a Taxa Selic?",
+        options: ["Taxa de internet", "Taxa básica de juros da economia", "Imposto sobre investimentos", "Taxa para abrir conta no banco"],
+        correct: 1,
+        explanation: "A Selic é a taxa básica de juros da economia brasileira, definida pelo Banco Central."
+    },
+    {
+        question: "Quanto você deve guardar em reserva de emergência?",
+        options: ["Nada, melhor investir tudo", "3 a 6 meses de despesas", "Todo o seu salário", "Apenas R$ 100"],
+        correct: 1,
+        explanation: "O ideal é ter de 3 a 6 meses das suas despesas guardados em investimentos líquidos para emergências."
+    },
+    {
+        question: "O que é diversificação?",
+        options: ["Investir em apenas um tipo de ativo", "Espalhar investimentos em diferentes ativos", "Gastar dinheiro em várias coisas", "Investir só em ações"],
+        correct: 1,
+        explanation: "Diversificar é distribuir seus investimentos em diferentes tipos de ativos para reduzir riscos."
+    },
+    {
+        question: "Qual o melhor momento para começar a investir?",
+        options: ["Quando ficar rico", "Só depois dos 40 anos", "Agora, mesmo com pouco dinheiro", "Nunca, é muito arriscado"],
+        correct: 2,
+        explanation: "O melhor momento é AGORA! Quanto antes começar, mais tempo seu dinheiro terá para crescer com juros compostos."
+    },
+    {
+        question: "O que são dividendos?",
+        options: ["Taxas bancárias", "Parte do lucro distribuída aos acionistas", "Impostos sobre investimentos", "Dívidas de empresas"],
+        correct: 1,
+        explanation: "Dividendos são parte dos lucros que empresas distribuem para seus acionistas regularmente."
+    },
+    {
+        question: "CDB é garantido por quem?",
+        options: ["Pelo FGC até R$ 250 mil por instituição", "Pelo governo federal", "Por ninguém", "Pela Bolsa de Valores"],
+        correct: 0,
+        explanation: "O FGC (Fundo Garantidor de Créditos) protege seu CDB em até R$ 250 mil por CPF e por instituição financeira."
+    }
+];
+
+let currentQuizQuestion = 0;
+let quizScoreTotal = 0;
+
+function startQuiz() {
+    const quizPage = document.getElementById('page-quiz');
+    
+    if (!quizPage || !quizPage.classList.contains('active')) {
+        navigateTo('quiz');
+        setTimeout(startQuiz, 100);
+        return;
+    }
+    
+    currentQuizQuestion = 0;
+    quizScoreTotal = 0;
+    
+    const intro = document.getElementById('quizIntro');
+    const result = document.getElementById('quizResult');
+    const questions = document.getElementById('quizQuestions');
+    
+    intro.style.display = 'none';
+    result.style.display = 'none';
+    questions.style.display = 'block';
+    
+    document.getElementById('quizScore').textContent = '0';
+    currentQuizQuestion = 0;
+    quizScoreTotal = 0;
+    
+    showQuestion();
+}
+
+function showQuestion() {
+    if (currentQuizQuestion >= quizQuestions.length) {
+        showResult();
+        return;
+    }
+    
+    const question = quizQuestions[currentQuizQuestion];
+    const progress = ((currentQuizQuestion + 1) / quizQuestions.length) * 100;
+    
+    document.getElementById('currentQuestion').textContent = currentQuizQuestion + 1;
+    document.getElementById('progressBar').style.width = progress + '%';
+    
+    const card = document.getElementById('questionCard');
+    
+    card.innerHTML = `
+        <h3>${question.question}</h3>
+        <div class="quiz-options">
+            ${question.options.map((option, index) => `
+                <button class="quiz-option" onclick="selectAnswer(${index})">
+                    <span class="option-letter">${String.fromCharCode(65 + index)}</span>
+                    <span class="option-text">${option}</span>
+                </button>
+            `).join('')}
+        </div>
+    `;
+}
+
+function selectAnswer(selectedIndex) {
+    const question = quizQuestions[currentQuizQuestion];
+    const isCorrect = selectedIndex === question.correct;
+    
+    if (isCorrect) {
+        quizScoreTotal += 10;
+        document.getElementById('quizScore').textContent = quizScoreTotal;
+    }
+    
+    // Mostrar feedback visual
+    const buttons = document.querySelectorAll('.quiz-option');
+    buttons.forEach((btn, index) => {
+        btn.disabled = true;
+        btn.style.cursor = 'not-allowed';
+        if (index === question.correct) {
+            btn.style.background = 'rgba(16, 185, 129, 0.1)';
+            btn.style.borderColor = 'var(--success)';
+        } else if (index === selectedIndex && !isCorrect) {
+            btn.style.background = 'rgba(239, 68, 68, 0.1)';
+            btn.style.borderColor = 'var(--danger)';
+        }
+    });
+    
+    // Mostrar explicação
+    const explanation = document.createElement('div');
+    explanation.style.cssText = `
+        margin-top: 1.5rem; 
+        padding: 1.25rem; 
+        background: ${isCorrect ? 'rgba(16, 185, 129, 0.08)' : 'rgba(239, 68, 68, 0.08)'}; 
+        border-left: 4px solid ${isCorrect ? 'var(--success)' : 'var(--danger)'}; 
+        border-radius: 0.5rem;
+    `;
+    explanation.innerHTML = `
+        <div style="font-weight: 600; color: ${isCorrect ? 'var(--success)' : 'var(--danger)'}; margin-bottom: 0.5rem; font-size: 1rem;">
+            ${isCorrect ? '✅ Correto!' : '❌ Ops! Resposta errada'}
+        </div>
+        <p style="color: var(--text-dark); margin: 0; line-height: 1.6; font-size: 0.9375rem;">
+            ${question.explanation}
+        </p>
+    `;
+    document.getElementById('questionCard').appendChild(explanation);
+    
+    // Botão próxima pergunta
+    setTimeout(() => {
+        const nextBtn = document.createElement('button');
+        nextBtn.className = 'btn btn-primary';
+        nextBtn.textContent = currentQuizQuestion < quizQuestions.length - 1 ? 'Próxima Pergunta →' : 'Ver Resultado 🎉';
+        nextBtn.style.cssText = 'width: 100%; margin-top: 1.5rem; font-size: 1rem; padding: 0.875rem;';
+        nextBtn.onclick = () => {
+            currentQuizQuestion++;
+            if (currentQuizQuestion < quizQuestions.length) {
+                showQuestion();
+            } else {
+                showResult();
+            }
+        };
+        document.getElementById('questionCard').appendChild(nextBtn);
+    }, 500);
+}
+
+function showResult() {
+    document.getElementById('quizQuestions').style.display = 'none';
+    document.getElementById('quizResult').style.display = 'block';
+    
+    const percentage = (quizScoreTotal / (quizQuestions.length * 10)) * 100;
+    let result;
+    
+    if (percentage >= 90) {
+        result = {
+            emoji: '🏆',
+            title: 'Mestre das Finanças!',
+            subtitle: `${quizScoreTotal}/${quizQuestions.length * 10} pontos - ${percentage.toFixed(0)}%`,
+            description: `
+                <p style="margin-bottom: 1rem;"><strong>Parabéns, expert!</strong> 🎯</p>
+                <p style="margin-bottom: 1rem;">Você é praticamente um guru dos investimentos! Conhece até a cor da cueca do CDI. Provavelmente já tem uma reserva de emergência, diversifica seus investimentos e até sonha com juros compostos. 📊</p>
+                <p><strong>Próximo passo:</strong> Considere dar palestras sobre educação financeira ou virar assessor do Warren Buffett! 😄</p>
+            `
+        };
+    } else if (percentage >= 70) {
+        result = {
+            emoji: '🎓',
+            title: 'Investidor Consciente',
+            subtitle: `${quizScoreTotal}/${quizQuestions.length * 10} pontos - ${percentage.toFixed(0)}%`,
+            description: `
+                <p style="margin-bottom: 1rem;"><strong>Muito bem!</strong> 👏</p>
+                <p style="margin-bottom: 1rem;">Você tem uma boa base de conhecimentos financeiros! Já sabe diferenciar CDB de FII sem precisar usar o Google. Continue estudando e em breve estará dando pitaco em reuniões de conselho! 💼</p>
+                <p><strong>Dica:</strong> Revise os conceitos que errou e você estará pronto para o próximo nível!</p>
+            `
+        };
+    } else if (percentage >= 50) {
+        result = {
+            emoji: '📚',
+            title: 'Aprendiz em Progresso',
+            subtitle: `${quizScoreTotal}/${quizQuestions.length * 10} pontos - ${percentage.toFixed(0)}%`,
+            description: `
+                <p style="margin-bottom: 1rem;"><strong>Você está no caminho certo!</strong> 🚀</p>
+                <p style="margin-bottom: 1rem;">Conhece o básico mas ainda confunde algumas coisas (tipo achar que FII é um tipo de macarrão instantâneo 🍜). Mas relaxa, todo mundo começa assim! O importante é continuar aprendendo.</p>
+                <p><strong>Recomendação:</strong> Explore mais o rafaInvest, especialmente a seção de educação. Seu futuro eu agradece!</p>
+            `
+        };
+    } else if (percentage >= 30) {
+        result = {
+            emoji: '🌱',
+            title: 'Novato Corajoso',
+            subtitle: `${quizScoreTotal}/${quizQuestions.length * 10} pontos - ${percentage.toFixed(0)}%`,
+            description: `
+                <p style="margin-bottom: 1rem;"><strong>Bem-vindo ao mundo dos investimentos!</strong> 🎈</p>
+                <p style="margin-bottom: 1rem;">Você está começando agora e tudo bem! Pelo menos não confundiu Taxa Selic com uma banda de rock. Ainda está na fase de achar que "liquidez" tem a ver com bebidas. 😅</p>
+                <p><strong>Não desanime:</strong> Todo investidor experiente já foi iniciante um dia. Estude, pratique e logo você estará mandando bem!</p>
+            `
+        };
+    } else {
+        result = {
+            emoji: '🐣',
+            title: 'Futuro Bilionário (em potencial!)',
+            subtitle: `${quizScoreTotal}/${quizQuestions.length * 10} pontos - ${percentage.toFixed(0)}%`,
+            description: `
+                <p style="margin-bottom: 1rem;"><strong>Todo mundo começa de algum lugar!</strong> 💪</p>
+                <p style="margin-bottom: 1rem;">Você está no nível "achei que CDB era sigla de Cerveja, Diversão e... Bem, falta o B". Mas olha o lado positivo: você teve coragem de fazer o quiz! E a boa notícia é que só pode melhorar daqui pra frente! 📈</p>
+                <p><strong>Missão:</strong> Dedique 10 minutinhos por dia estudando os conceitos básicos. Em um mês você já será um investidor consciente! O rafaInvest está aqui pra te ajudar! 🚀</p>
+            `
+        };
+    }
+    
+    document.getElementById('resultEmoji').textContent = result.emoji;
+    document.getElementById('resultTitle').textContent = result.title;
+    document.getElementById('resultSubtitle').textContent = result.subtitle;
+    document.getElementById('resultDescription').innerHTML = result.description;
+}
+
+function navigateToHome() {
+    document.querySelector('[data-page="home"]').click();
+}
+
