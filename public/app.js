@@ -1348,14 +1348,14 @@ function renderProfileQuiz() {
     
     container.innerHTML = state.data.educacao.quiz.map((q, index) => `
         <div class="form-group" style="padding: 1.5rem; background: var(--bg-surface); border-radius: 0.5rem; margin-bottom: 1.5rem;">
-            <label class="form-label" style="font-size: 1rem; margin-bottom: 1rem;">
+            <label class="form-label" style="font-size: 1rem; margin-bottom: 1rem; line-height: 1.5;">
                 ${index + 1}. ${q.question}
             </label>
             ${q.options.map((opt, optIndex) => `
                 <div style="margin-bottom: 0.75rem;">
-                    <label style="display: flex; align-items: center; padding: 0.75rem; border: 2px solid var(--border-color); border-radius: 0.5rem; cursor: pointer; transition: var(--transition);" onmouseover="this.style.borderColor='var(--info)'" onmouseout="this.style.borderColor='var(--border-color)'">
-                        <input type="radio" name="${q.id}" value="${optIndex}" required style="margin-right: 0.75rem;">
-                        <span style="color: var(--text-dark);">${opt.text}</span>
+                    <label style="display: flex; align-items: flex-start; padding: 0.875rem; border: 2px solid var(--border-color); border-radius: 0.5rem; cursor: pointer; transition: var(--transition); word-wrap: break-word;" onmouseover="this.style.borderColor='var(--info)'; this.style.background='rgba(59, 130, 246, 0.05)'" onmouseout="this.style.borderColor='var(--border-color)'; this.style.background='transparent'">
+                        <input type="radio" name="${q.id}" value="${optIndex}" required style="margin-right: 0.75rem; margin-top: 0.125rem; flex-shrink: 0; width: 18px; height: 18px;">
+                        <span style="color: var(--text-dark); line-height: 1.5; word-wrap: break-word; overflow-wrap: break-word; flex: 1;">${opt.text}</span>
                     </label>
                 </div>
             `).join('')}

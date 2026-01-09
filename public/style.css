@@ -2145,29 +2145,55 @@ tbody tr:hover {
     }
     
     /* Perfil - opções de radio mobile */
-    #quizQuestions .form-group > div > label {
-        padding: 0.625rem 0.75rem !important;
-        font-size: 0.875rem !important;
-    }
-    
-    #quizQuestions .form-group > div > label input[type="radio"] {
-        margin-right: 0.5rem !important;
-        flex-shrink: 0;
-    }
-    
-    #quizQuestions .form-group > div > label span {
-        line-height: 1.4;
-        font-size: 0.875rem !important;
-    }
-    
     #quizQuestions .form-group {
         padding: 1rem !important;
         margin-bottom: 1rem !important;
+        background: var(--bg-surface) !important;
     }
     
     #quizQuestions .form-group .form-label {
         font-size: 0.9375rem !important;
         margin-bottom: 0.75rem !important;
+        line-height: 1.4 !important;
+    }
+    
+    #quizQuestions .form-group > div {
+        margin-bottom: 0.625rem !important;
+    }
+    
+    #quizQuestions .form-group > div > label {
+        padding: 0.875rem !important;
+        font-size: 0.875rem !important;
+        display: flex !important;
+        align-items: flex-start !important;
+        border: 2px solid var(--border-color) !important;
+        border-radius: 0.5rem !important;
+        cursor: pointer !important;
+        transition: var(--transition) !important;
+        word-wrap: break-word !important;
+        word-break: break-word !important;
+    }
+    
+    #quizQuestions .form-group > div > label:hover {
+        border-color: var(--info) !important;
+        background: rgba(59, 130, 246, 0.05) !important;
+    }
+    
+    #quizQuestions .form-group > div > label input[type="radio"] {
+        margin-right: 0.625rem !important;
+        margin-top: 0.125rem !important;
+        flex-shrink: 0 !important;
+        width: 18px !important;
+        height: 18px !important;
+    }
+    
+    #quizQuestions .form-group > div > label span {
+        line-height: 1.5 !important;
+        font-size: 0.875rem !important;
+        color: var(--text-dark) !important;
+        flex: 1 !important;
+        word-wrap: break-word !important;
+        overflow-wrap: break-word !important;
     }
     
     /* Cards do dashboard */
