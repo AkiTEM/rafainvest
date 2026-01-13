@@ -21,7 +21,18 @@ function openAgentModal() {
     const modal = document.getElementById('agentModal');
     if (modal) {
         modal.classList.add('active');
-        document.body.style.overflow = 'hidden';
+        document.body.classList.add('modal-open');
+        
+        // Força recálculo do layout para mobile
+        requestAnimationFrame(() => {
+            const modalElement = modal.querySelector('.modal');
+            if (modalElement) {
+                modalElement.style.width = '';
+                modalElement.style.height = '';
+                modalElement.style.maxWidth = '';
+                modalElement.style.maxHeight = '';
+            }
+        });
         
         // Adiciona mensagem de boas-vindas se o chat estiver vazio
         const chatContainer = document.getElementById('agentChatContainer');
@@ -35,29 +46,27 @@ function closeAgentModal() {
     const modal = document.getElementById('agentModal');
     if (modal) {
         modal.classList.remove('active');
-        document.body.style.overflow = '';
+        document.body.classList.remove('modal-open');
     }
 }
 
 // ==================== MENSAGENS ====================
 function addAgentWelcomeMessage() {
     const welcomeMessage = `
-        <div class="agent-welcome" style="text-align: center; padding: 0.75rem 1rem 1.5rem;">
-            <div style="width: 80px; height: 80px; margin: 0 auto 1rem;">
-                <img src="rafaelo-avatar.png" alt="Rafaelo" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover; box-shadow: 0 8px 24px rgba(99, 102, 241, 0.3); border: 3px solid var(--accent-primary);">
+        <div class="agent-welcome">
+            <div class="agent-welcome-avatar">
+                <img src="rafaelo-avatar.png" alt="Rafaelo">
             </div>
-            <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--text-dark); margin-bottom: 0.75rem;">
-                Olá! Sou o Rafaelo 👋
-            </h3>
-            <p style="font-size: 0.9375rem; color: var(--text-light); line-height: 1.6; max-width: 500px; margin: 0 auto 0.75rem;">
-                Seu <strong style="color: var(--accent-primary);">consultor financeiro inteligente</strong> especializado em investimentos brasileiros. Uso IA para responder suas dúvidas de forma simples, objetiva e personalizada!
+            <h3>Olá! Sou o Rafaelo 👋</h3>
+            <p class="agent-welcome-intro">
+                Seu <strong>consultor financeiro inteligente</strong> especializado em investimentos brasileiros. Uso IA para responder suas dúvidas de forma simples, objetiva e personalizada!
             </p>
-            <p style="font-size: 0.875rem; color: var(--text-muted); line-height: 1.5; max-width: 500px; margin: 0 auto;">
+            <p class="agent-welcome-features">
                 📊 Posso te ajudar com: <strong>CDI, CDB, FIIs, Tesouro Direto, Ações, Criptomoedas, Perfil de Investidor, IR</strong> e muito mais!
             </p>
-            <div style="margin-top: 1.5rem; padding: 1rem 1.25rem; background: rgba(99, 102, 241, 0.06); border-radius: 12px; border: 1px solid rgba(99, 102, 241, 0.15);">
-                <p style="font-size: 0.875rem; color: var(--text-dark); margin: 0; line-height: 1.5;">
-                    💡 <strong style="color: var(--accent-primary);">Dica:</strong> Clique nos botões acima com perguntas prontas ou digite sua própria dúvida abaixo!
+            <div class="agent-welcome-tip">
+                <p>
+                    💡 <strong>Dica:</strong> Clique nos botões acima com perguntas prontas ou digite sua própria dúvida abaixo!
                 </p>
             </div>
         </div>
