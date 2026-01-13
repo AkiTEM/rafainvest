@@ -3204,19 +3204,13 @@ tbody tr:hover {
     
     .agent-chat-container {
         padding: 1rem;
-        padding-bottom: 6rem;
+        padding-bottom: 8rem;
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
     }
     
     .typing-indicator {
         padding: 0 1rem 0.875rem;
-        position: fixed;
-        bottom: 60px;
-        left: 0;
-        right: 0;
-        background: var(--bg-surface);
-        z-index: 999;
     }
     
     .agent-message-content {
