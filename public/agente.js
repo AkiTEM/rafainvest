@@ -16,16 +16,24 @@ const AGENT_CONFIG = {
 let conversationHistory = [];
 let isAgentProcessing = false;
 
+// Cache de elementos DOM (evita múltiplos getElementById)
+const elements = {
+    get modal() { return document.getElementById('agentModal'); },
+    get chatContainer() { return document.getElementById('agentChatContainer'); },
+    get typingIndicator() { return document.getElementById('agentTypingIndicator'); },
+    get messageInput() { return document.getElementById('agentMessageInput'); },
+    get sendButton() { return document.getElementById('agentSendBtn'); }
+};
+
 // ==================== FUNÇÕES DE MODAL ====================
 function openAgentModal() {
-    const modal = document.getElementById('agentModal');
-    if (modal) {
-        modal.classList.add('active');
+    if (elements.modal) {
+        elements.modal.classList.add('active');
         document.body.classList.add('modal-open');
         
         // Força recálculo do layout para mobile
         requestAnimationFrame(() => {
-            const modalElement = modal.querySelector('.modal');
+            const modalElement = elements.modal.querySelector('.modal');
             if (modalElement) {
                 modalElement.style.width = '';
                 modalElement.style.height = '';
@@ -42,9 +50,8 @@ function openAgentModal() {
 }
 
 function closeAgentModal() {
-    const modal = document.getElementById('agentModal');
-    if (modal) {
-        modal.classList.remove('active');
+    if (elements.modal) {
+        elements.modal.classList.remove('active');
         document.body.classList.remove('modal-open');
     }
 }
@@ -52,11 +59,8 @@ function closeAgentModal() {
 // ==================== MENSAGENS ====================
 // Helper: Insere elemento antes do typing indicator
 function insertBeforeTypingIndicator(element) {
-    const chatContainer = document.getElementById('agentChatContainer');
-    const typingIndicator = document.getElementById('agentTypingIndicator');
-    
-    if (typingIndicator) {
-        chatContainer.insertBefore(element, typingIndicator);
+    if (elements.typingIndicator) {
+        elements.chatContainer.insertBefore(element, elements.typingIndicator);
     } else {
         chatContainer.appendChild(element);
     }
@@ -64,8 +68,7 @@ function insertBeforeTypingIndicator(element) {
 
 // Helper: Verifica se o chat tem mensagens reais
 function chatHasMessages() {
-    const chatContainer = document.getElementById('agentChatContainer');
-    return chatContainer?.querySelector('.agent-message, .agent-welcome') !== null;
+    return elements.chatContainer?.querySelector('.agent-message, .agent-welcome') !== null;
 }
 
 function addAgentWelcomeMessage() {
@@ -95,11 +98,10 @@ function addAgentWelcomeMessage() {
 }
 
 function addAgentMessage(content, type = 'bot') {
-    const chatContainer = document.getElementById('agentChatContainer');
-    if (!chatContainer) return;
+    if (!elements.chatContainer) return;
     
     // Remove welcome message se existir
-    chatContainer.querySelector('.agent-welcome')?.remove();
+    elements.chatContainer.querySelector('.agent-welcome')?.remove();
     
     const messageDiv = document.createElement('div');
     messageDiv.className = `agent-message agent-message-${type}`;
@@ -112,7 +114,7 @@ function addAgentMessage(content, type = 'bot') {
     insertBeforeTypingIndicator(messageDiv);
     
     // Scroll para o fim
-    chatContainer.scrollTop = chatContainer.scrollHeight;
+    elements.chatContainer.scrollTop = elements.chatContainer.scrollHeight;
 }
 
 function formatBotMessage(text) {
@@ -149,16 +151,14 @@ function formatBotMessage(text) {
 }
 
 function showAgentTyping() {
-    const indicator = document.getElementById('agentTypingIndicator');
-    if (indicator) {
-        indicator.classList.add('visible');
+    if (elements.typingIndicator) {
+        elements.typingIndicator.classList.add('visible');
     }
 }
 
 function hideAgentTyping() {
-    const indicator = document.getElementById('agentTypingIndicator');
-    if (indicator) {
-        indicator.classList.remove('visible');
+    if (elements.typingIndicator) {
+        elements.typingIndicator.classList.remove('visible');
     }
 }
 
@@ -334,17 +334,16 @@ Educar e orientar pessoas sobre investimentos de forma SIMPLES, CLARA e OBJETIVA
 
 // ==================== ENVIO DE MENSAGENS ====================
 async function sendAgentMessage() {
-    const input = document.getElementById('agentMessageInput');
-    const message = input.value.trim();
+    const message = elements.messageInput.value.trim();
     
     if (!message || isAgentProcessing) return;
     
     // Adiciona mensagem do usuário
     addAgentMessage(message, 'user');
-    input.value = '';
+    elements.messageInput.value = '';
     
     isAgentProcessing = true;
-    document.getElementById('agentSendBtn').disabled = true;
+    elements.sendButton.disabled = true;
     
     showAgentTyping();
     
@@ -366,15 +365,14 @@ async function sendAgentMessage() {
         addAgentMessage('Desculpe, ocorreu um erro ao processar sua mensagem. Tente novamente! 😅', 'bot');
     } finally {
         isAgentProcessing = false;
-        document.getElementById('agentSendBtn').disabled = false;
-        input.focus();
+        elements.sendButton.disabled = false;
+        elements.messageInput.focus();
     }
 }
 
 function sendAgentQuickMessage(message) {
-    const input = document.getElementById('agentMessageInput');
-    if (input) {
-        input.value = message;
+    if (elements.messageInput) {
+        elements.messageInput.value = message;
         sendAgentMessage();
     }
 }
