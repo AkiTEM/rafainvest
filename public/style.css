@@ -3209,6 +3209,16 @@ tbody tr:hover {
         -webkit-overflow-scrolling: touch;
     }
     
+    .typing-indicator {
+        padding: 0 1rem 0.875rem;
+        position: fixed;
+        bottom: 60px;
+        left: 0;
+        right: 0;
+        background: var(--bg-surface);
+        z-index: 999;
+    }
+    
     .agent-message-content {
         max-width: 85%;
         font-size: 0.875rem;
