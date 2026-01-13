@@ -143,14 +143,14 @@ function formatBotMessage(text) {
 function showAgentTyping() {
     const indicator = document.getElementById('agentTypingIndicator');
     if (indicator) {
-        indicator.style.display = 'block';
+        indicator.classList.add('visible');
     }
 }
 
 function hideAgentTyping() {
     const indicator = document.getElementById('agentTypingIndicator');
     if (indicator) {
-        indicator.style.display = 'none';
+        indicator.classList.remove('visible');
     }
 }
 
