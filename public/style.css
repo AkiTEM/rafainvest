@@ -3026,6 +3026,8 @@ tbody tr:hover {
 .typing-indicator {
     display: none;
     padding: 0 1.25rem 0.875rem;
+    margin-top: 0.5rem;
+    clear: both;
 }
 
 .typing-indicator.visible {
@@ -3036,6 +3038,11 @@ tbody tr:hover {
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    background: var(--bg-surface-elevated);
+    border-radius: 12px;
+    border: 1px solid var(--border-light);
+    max-width: fit-content;
 }
 
 .typing-text {
@@ -3204,13 +3211,14 @@ tbody tr:hover {
     
     .agent-chat-container {
         padding: 1rem;
-        padding-bottom: 8rem;
+        padding-bottom: 10rem;
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
     }
     
     .typing-indicator {
-        padding: 0 1rem 0.875rem;
+        padding: 0 1rem 1rem;
+        margin-bottom: 1rem;
     }
     
     .agent-message-content {

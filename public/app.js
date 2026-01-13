@@ -4,8 +4,8 @@
    ================================== */
 
 // ===== CONFIGURAÇÃO =====
-const API_BASE = window.location.hostname === 'localhost' 
-    ? 'http://localhost:3000/.netlify/functions'
+const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? '/.netlify/functions'
     : '/.netlify/functions';
 
 // ===== ESTADO GLOBAL =====

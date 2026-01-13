@@ -35,8 +35,7 @@ function openAgentModal() {
         });
         
         // Adiciona mensagem de boas-vindas se o chat estiver vazio
-        const chatContainer = document.getElementById('agentChatContainer');
-        if (chatContainer && chatContainer.children.length === 0) {
+        if (!chatHasMessages()) {
             addAgentWelcomeMessage();
         }
     }
@@ -51,31 +50,48 @@ function closeAgentModal() {
 }
 
 // ==================== MENSAGENS ====================
+// Helper: Insere elemento antes do typing indicator
+function insertBeforeTypingIndicator(element) {
+    const chatContainer = document.getElementById('agentChatContainer');
+    const typingIndicator = document.getElementById('agentTypingIndicator');
+    
+    if (typingIndicator) {
+        chatContainer.insertBefore(element, typingIndicator);
+    } else {
+        chatContainer.appendChild(element);
+    }
+}
+
+// Helper: Verifica se o chat tem mensagens reais
+function chatHasMessages() {
+    const chatContainer = document.getElementById('agentChatContainer');
+    return chatContainer?.querySelector('.agent-message, .agent-welcome') !== null;
+}
+
 function addAgentWelcomeMessage() {
-    const welcomeMessage = `
-        <div class="agent-welcome">
-            <div class="agent-welcome-avatar">
-                <img src="rafaelo-avatar.png" alt="Rafaelo">
-            </div>
-            <h3>Olá! Sou o Rafaelo 👋</h3>
-            <p class="agent-welcome-intro">
-                Seu <strong>consultor financeiro inteligente</strong> especializado em investimentos brasileiros. Uso IA para responder suas dúvidas de forma simples, objetiva e personalizada!
+    if (chatHasMessages()) return;
+    
+    const welcomeDiv = document.createElement('div');
+    welcomeDiv.className = 'agent-welcome';
+    welcomeDiv.innerHTML = `
+        <div class="agent-welcome-avatar">
+            <img src="rafaelo-avatar.png" alt="Rafaelo">
+        </div>
+        <h3>Olá! Sou o Rafaelo 👋</h3>
+        <p class="agent-welcome-intro">
+            Seu <strong>consultor financeiro inteligente</strong> especializado em investimentos brasileiros. Uso IA para responder suas dúvidas de forma simples, objetiva e personalizada!
+        </p>
+        <p class="agent-welcome-features">
+            📊 Posso te ajudar com: <strong>CDI, CDB, FIIs, Tesouro Direto, Ações, Criptomoedas, Perfil de Investidor, IR</strong> e muito mais!
+        </p>
+        <div class="agent-welcome-tip">
+            <p>
+                💡 <strong>Dica:</strong> Clique nos botões acima com perguntas prontas ou digite sua própria dúvida abaixo!
             </p>
-            <p class="agent-welcome-features">
-                📊 Posso te ajudar com: <strong>CDI, CDB, FIIs, Tesouro Direto, Ações, Criptomoedas, Perfil de Investidor, IR</strong> e muito mais!
-            </p>
-            <div class="agent-welcome-tip">
-                <p>
-                    💡 <strong>Dica:</strong> Clique nos botões acima com perguntas prontas ou digite sua própria dúvida abaixo!
-                </p>
-            </div>
         </div>
     `;
     
-    const chatContainer = document.getElementById('agentChatContainer');
-    if (chatContainer) {
-        chatContainer.innerHTML = welcomeMessage;
-    }
+    insertBeforeTypingIndicator(welcomeDiv);
 }
 
 function addAgentMessage(content, type = 'bot') {
@@ -83,25 +99,17 @@ function addAgentMessage(content, type = 'bot') {
     if (!chatContainer) return;
     
     // Remove welcome message se existir
-    if (chatContainer.children.length === 1 && chatContainer.innerHTML.includes('Rafaelo')) {
-        chatContainer.innerHTML = '';
-    }
+    chatContainer.querySelector('.agent-welcome')?.remove();
     
     const messageDiv = document.createElement('div');
     messageDiv.className = `agent-message agent-message-${type}`;
     
     const contentDiv = document.createElement('div');
     contentDiv.className = 'agent-message-content';
-    
-    // Formata a mensagem se for do bot
-    if (type === 'bot') {
-        content = formatBotMessage(content);
-    }
-    
-    contentDiv.innerHTML = content;
+    contentDiv.innerHTML = type === 'bot' ? formatBotMessage(content) : content;
     
     messageDiv.appendChild(contentDiv);
-    chatContainer.appendChild(messageDiv);
+    insertBeforeTypingIndicator(messageDiv);
     
     // Scroll para o fim
     chatContainer.scrollTop = chatContainer.scrollHeight;
