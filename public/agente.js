@@ -31,6 +31,12 @@ function openAgentModal() {
         elements.modal.classList.add('active');
         document.body.classList.add('modal-open');
         
+        // Esconde o botão flutuante
+        const floatBtn = document.getElementById('chatFloatBtn');
+        if (floatBtn) {
+            floatBtn.classList.add('hidden');
+        }
+        
         // Força recálculo do layout para mobile
         requestAnimationFrame(() => {
             const modalElement = elements.modal.querySelector('.modal');
@@ -53,6 +59,12 @@ function closeAgentModal() {
     if (elements.modal) {
         elements.modal.classList.remove('active');
         document.body.classList.remove('modal-open');
+        
+        // Mostra o botão flutuante novamente
+        const floatBtn = document.getElementById('chatFloatBtn');
+        if (floatBtn) {
+            floatBtn.classList.remove('hidden');
+        }
     }
 }
 

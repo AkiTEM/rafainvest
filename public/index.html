@@ -920,7 +920,7 @@
     <!-- Modal de Recomendações -->
     <div class="modal-overlay" id="welcomeModal">
         <div class="modal" style="max-width: 800px;">
-            <div class="modal-header" style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%); border-bottom: 2px solid rgba(99, 102, 241, 0.2);">
+            <div class="modal-header recommendations-header" style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%); border-bottom: 2px solid rgba(99, 102, 241, 0.2);">
                 <div style="display: flex; align-items: center; gap: 1rem;">
                     <div style="width: 48px; height: 48px; background: linear-gradient(135deg, #6366F1, #8B5CF6); border-radius: 12px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);">
                         <svg class="icon" style="width: 28px; height: 28px; color: white;">
@@ -932,7 +932,7 @@
                         <p style="font-size: 0.875rem; color: var(--text-muted); margin: 0;">Baseadas nas taxas reais do mercado</p>
                     </div>
                 </div>
-                <button class="modal-close" onclick="closeWelcomeModal()">
+                <button class="modal-close recommendations-close" onclick="closeWelcomeModal()">
                     <svg class="icon">
                         <use href="svgs/icons.svg#icon-x"></use>
                     </svg>
@@ -1038,6 +1038,14 @@
             </div>
         </div>
     </div>
+
+    <!-- Botão Flutuante do Chat -->
+    <button class="chat-float-btn" id="chatFloatBtn" onclick="openAgentModal()" aria-label="Abrir Chat com Rafaelo">
+        <div class="chat-float-avatar">
+            <img src="rafaelo-avatar.png" alt="Rafaelo">
+        </div>
+        <div class="chat-float-pulse"></div>
+    </button>
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
